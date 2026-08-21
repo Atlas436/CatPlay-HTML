@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CatPlay+ | Escolha</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="barra-topo">
+    <a class="marca" href="mode.html">
+      <img src="assets/logo.svg" alt="CatPlay+" />
+    </a>
+    <nav>
+      <a href="perfil.html">Meu perfil</a>
+      <button class="link" id="botao-sair">Sair</button>
+    </nav>
+  </header>
+
+  <main class="tela" style="min-height: 70vh">
+    <h1 class="titulo" id="pergunta" style="max-width: 600px"></h1>
+
+    <div class="grade-opcoes" id="grade-opcoes" style="margin-top: 20px; max-width: 700px"></div>
+
+    <p class="centralizado" style="margin-top: 24px">
+      <a class="link" href="mode.html">Voltar</a>
+    </p>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    exigirLogin();
+
+    document.getElementById("botao-sair").addEventListener("click", function () {
+      encerrarSessao();
+      window.location.href = "index.html";
+    });
+
+    var parametros = new URLSearchParams(window.location.search);
+    var tipo = parametros.get("tipo"); // "humor" ou "genero"
+
+    var opcoes = tipo === "humor" ? HUMORES : GENEROS;
+    document.getElementById("pergunta").textContent =
+      tipo === "humor"
+        ? "O que combina com o seu momento agora?"
+        : "Qual gênero te chama mais atenção?";
+
+    var grade = document.getElementById("grade-opcoes");
+    opcoes.forEach(function (opcao) {
+      var link = document.createElement("a");
+      link.className = "opcao-card";
+      link.href = "results.html?tipo=" + tipo + "&valor=" + opcao.chave;
+      link.innerHTML = '<span class="emoji">' + opcao.emoji + "</span>" + opcao.rotulo;
+      grade.appendChild(link);
+    });
+  </script>
+</body>
+</html>

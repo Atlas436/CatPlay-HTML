@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CatPlay+ | Suas recomendações</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="barra-topo">
+    <a class="marca" href="mode.html">
+      <img src="assets/logo.svg" alt="CatPlay+" />
+    </a>
+    <nav>
+      <a href="perfil.html">Meu perfil</a>
+      <button class="link" id="botao-sair">Sair</button>
+    </nav>
+  </header>
+
+  <main class="conteudo">
+    <div class="centralizado" style="margin-bottom: 40px">
+      <h1 class="titulo" id="titulo-saudacao"></h1>
+      <p class="subtitulo" id="subtitulo-selecao"></p>
+    </div>
+
+    <div id="area-resultados"></div>
+
+    <div class="rodape-acoes">
+      <a class="botao botao-primario" href="mode.html">Recomeçar / Trocar Seleção</a>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    var sessao = exigirLogin();
+
+    document.getElementById("botao-sair").addEventListener("click", function () {
+      encerrarSessao();
+      window.location.href = "index.html";
+    });
+
+    var parametros = new URLSearchParams(window.location.search);
+    var tipo = parametros.get("tipo"); // "humor" ou "genero"
+    var valor = parametros.get("valor");
+
+    if (sessao) {
+      document.getElementById("titulo-saudacao").textContent =
+        "Aqui estão suas recomendações, " + sessao.nome + "!";
+    }
+
+    var listaOpcoes = tipo === "humor" ? HUMORES : GENEROS;
+    var opcaoEscolhida = listaOpcoes.filter(function (o) {
+      return o.chave === valor;
+    })[0];
+
+    if (opcaoEscolhida) {
+      document.getElementById("subtitulo-selecao").textContent =
+        opcaoEscolhida.emoji + " " + opcaoEscolhida.rotulo;
+    }
+
+    // filtra o catálogo por humor ou por gênero
+    var itensFiltrados = CATALOGO.filter(function (item) {
+      if (tipo === "humor") return item.humores.indexOf(valor) !== -1;
+      return item.genero === valor;
+    });
+
+    var area = document.getElementById("area-resultados");
+
+    if (itensFiltrados.length === 0) {
+      area.innerHTML =
+        '<p class="centralizado">Ainda não temos recomendações para essa combinação. Tente outra opção!</p>';
+    }
+
+    TIPOS_MIDIA.forEach(function (tipoMidia) {
+      var itensDoTipo = itensFiltrados.filter(function (item) {
+        return item.tipo === tipoMidia;
+      });
+      if (itensDoTipo.length === 0) return;
+
+      var secao = document.createElement("section");
+      secao.className = "secao-midia";
+
+      var titulo = document.createElement("h2");
+      titulo.textContent = ROTULOS_TIPO[tipoMidia];
+      secao.appendChild(titulo);
+
+      var grade = document.createElement("div");
+      grade.className = "grade-cards";
+
+      itensDoTipo.forEach(function (item) {
+        var card = document.createElement("article");
+        card.className = "midia-card";
+
+        var tagsHtml = item.tags
+          .map(function (tag) {
+            return '<span class="tag">#' + tag + "</span>";
+          })
+          .join("");
+
+        card.innerHTML =
+          '<div class="cabecalho-card">' +
+          "<h3>" + item.titulo + "</h3>" +
+          '<span class="tipo-etiqueta">' + item.tipo + "</span>" +
+          "</div>" +
+          "<p>" + item.sinopse + "</p>" +
+          '<div class="tags">' + tagsHtml + "</div>";
+
+        grade.appendChild(card);
+      });
+
+      secao.appendChild(grade);
+      area.appendChild(secao);
+    });
+  </script>
+</body>
+</html>

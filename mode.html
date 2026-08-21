@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CatPlay+ | Como prefere escolher?</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="barra-topo">
+    <a class="marca" href="mode.html">
+      <img src="assets/logo.svg" alt="CatPlay+" />
+    </a>
+    <nav>
+      <a href="perfil.html">Meu perfil</a>
+      <button class="link" id="botao-sair">Sair</button>
+    </nav>
+  </header>
+
+  <main class="tela" style="min-height: 70vh">
+    <p class="subtitulo" id="saudacao"></p>
+    <h1 class="titulo" style="max-width: 600px">
+      Como você prefere escolher sua recomendação hoje?
+    </h1>
+
+    <div class="grade-opcoes" style="margin-top: 20px">
+      <a class="opcao-card destaque" href="derivation.html?tipo=humor">
+        <span class="emoji">😽</span>
+        Por Humor
+        <small>Como estou me sentindo</small>
+      </a>
+      <a class="opcao-card destaque secundario" href="derivation.html?tipo=genero">
+        <span class="emoji">🏷️</span>
+        Por Gênero
+        <small>Escolha um gênero favorito</small>
+      </a>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    var sessao = exigirLogin();
+    if (sessao) {
+      document.getElementById("saudacao").textContent = "Olá, " + sessao.nome + "!";
+    }
+
+    document.getElementById("botao-sair").addEventListener("click", function () {
+      encerrarSessao();
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

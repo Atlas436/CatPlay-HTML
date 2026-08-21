@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CatPlay+ | Meu perfil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="barra-topo">
+    <a class="marca" href="mode.html">
+      <img src="assets/logo.svg" alt="CatPlay+" />
+    </a>
+    <nav>
+      <a href="mode.html">Voltar</a>
+      <button class="link" id="botao-sair">Sair</button>
+    </nav>
+  </header>
+
+  <main class="tela" style="min-height: 70vh">
+    <h1 class="titulo" style="font-size: 1.4rem">Meu perfil</h1>
+    <p class="texto-ajuda centralizado" style="max-width: 380px; margin-bottom: 20px">
+      Aqui você pode atualizar seus dados (Update) ou excluir sua conta (Delete) —
+      o CRUD completo do usuário.
+    </p>
+
+    <form class="cartao-perfil" id="form-perfil">
+      <div id="area-mensagem"></div>
+
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="usuario">Usuário</label>
+      <input type="text" id="usuario" name="usuario" required />
+
+      <label for="senha">Nova senha</label>
+      <input type="password" id="senha" name="senha" placeholder="Deixe em branco para manter a atual" />
+
+      <button type="submit" class="botao-primario">Salvar alterações</button>
+    </form>
+
+    <div class="cartao-perfil" style="margin-top: 16px; border: 1px solid rgba(179, 66, 58, 0.3)">
+      <strong style="color: #932f28">Zona de risco</strong>
+      <p class="texto-ajuda">Excluir sua conta é permanente e não pode ser desfeito.</p>
+      <button type="button" class="botao-perigo" id="botao-excluir">Excluir conta</button>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    var sessao = exigirLogin();
+
+    if (sessao) {
+      document.getElementById("nome").value = sessao.nome;
+      document.getElementById("usuario").value = sessao.usuario;
+    }
+
+    document.getElementById("botao-sair").addEventListener("click", function () {
+      encerrarSessao();
+      window.location.href = "index.html";
+    });
+
+    document.getElementById("form-perfil").addEventListener("submit", function (evento) {
+      evento.preventDefault();
+
+      var nome = document.getElementById("nome").value;
+      var usuario = document.getElementById("usuario").value;
+      var senha = document.getElementById("senha").value;
+      var areaMensagem = document.getElementById("area-mensagem");
+
+      var resultado = atualizarUsuario(sessao.usuario, {
+        nome: nome,
+        usuario: usuario,
+        senha: senha,
+      });
+
+      if (!resultado.ok) {
+        areaMensagem.innerHTML = '<p class="erro">' + resultado.erro + "</p>";
+        return;
+      }
+
+      definirSessao(resultado.usuario);
+      sessao = resultado.usuario;
+      areaMensagem.innerHTML = '<p class="sucesso">Dados atualizados com sucesso!</p>';
+    });
+
+    document.getElementById("botao-excluir").addEventListener("click", function () {
+      var confirmou = window.confirm(
+        "Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita."
+      );
+      if (!confirmou) return;
+
+      excluirUsuario(sessao.usuario);
+      encerrarSessao();
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
