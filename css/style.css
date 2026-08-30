@@ -600,6 +600,93 @@ button:disabled {
   padding: 2px 8px;
 }
 
+/* ===== Chatbot flutuante ===== */
+#catbot-botao {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--vermelho);
+  color: white;
+  border: var(--borda);
+  box-shadow: var(--sombra-dura-pequena);
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 40;
+  padding: 0;
+}
+
+#catbot-painel {
+  position: fixed;
+  bottom: 86px;
+  right: 20px;
+  width: min(320px, calc(100vw - 40px));
+  max-height: 420px;
+  background: white;
+  color: var(--negro);
+  border: var(--borda);
+  box-shadow: var(--sombra-dura);
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+}
+
+#catbot-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: var(--borda);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+#catbot-mensagens {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+}
+
+.catbot-bolha {
+  padding: 8px 12px;
+  border: 2px solid var(--negro);
+  font-size: 0.85rem;
+  white-space: pre-line;
+  max-width: 85%;
+}
+.catbot-bot {
+  background: var(--branco);
+  align-self: flex-start;
+}
+.catbot-usuario {
+  background: var(--amarelo);
+  align-self: flex-end;
+}
+
+#catbot-form {
+  display: flex;
+  gap: 6px;
+  padding: 10px;
+  border-top: var(--borda);
+}
+#catbot-form input {
+  flex: 1;
+  border: var(--borda);
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+#catbot-form button {
+  padding: 8px 14px;
+  font-size: 0.8rem;
+}
+
 .rodape-acoes {
   text-align: center;
   margin-top: 28px;
