@@ -70,7 +70,7 @@ body::before {
   overflow: hidden;
   z-index: 20;
   pointer-events: none;
-  animation: marquee-vertical 16s linear infinite;
+  animation: marquee-vertical 8s linear infinite;
 }
 
 @keyframes marquee-vertical {
@@ -78,7 +78,7 @@ body::before {
     transform: skewY(-3deg) translateY(0);
   }
   to {
-    transform: skewY(-3deg) translateY(-50%);
+    transform: skewY(-3deg) translateY(-320px);
   }
 }
 
