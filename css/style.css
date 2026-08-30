@@ -13,6 +13,30 @@
   --sombra: 0 4px 14px rgba(107, 48, 33, 0.12);
 }
 
+/* ===== Transição entre páginas ("página nova sobe por cima da antiga") =====
+   View Transitions API — nativa do navegador, sem JS. Em navegadores sem
+   suporte, a navegação simplesmente acontece sem animação (nada quebra). */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  animation: subir-por-cima 0.35s cubic-bezier(0.6, 0, 0.2, 1) both;
+}
+
+@keyframes subir-por-cima {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 * {
   box-sizing: border-box;
 }
