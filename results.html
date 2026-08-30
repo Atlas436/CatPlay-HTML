@@ -61,8 +61,8 @@
     })[0];
 
     if (opcaoEscolhida) {
-      document.getElementById("subtitulo-selecao").textContent =
-        opcaoEscolhida.emoji + " " + opcaoEscolhida.rotulo;
+      document.getElementById("subtitulo-selecao").innerHTML =
+        '<span class="emoji">' + opcaoEscolhida.emoji + "</span> " + opcaoEscolhida.rotulo;
     }
 
     montarResultados();
