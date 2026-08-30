@@ -116,6 +116,22 @@ body::after {
   body::before {
     display: none;
   }
+  body::after {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .barra-topo nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+  }
+  .barra-topo nav a,
+  .barra-topo nav button {
+    padding: 8px 12px;
+    font-size: 0.72rem;
+  }
 }
 
 .tela {
