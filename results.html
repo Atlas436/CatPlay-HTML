@@ -31,7 +31,10 @@
     </div>
   </main>
 
+  <script src="js/vendor/supabase.js"></script>
+  <script src="js/supabaseClient.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/biblioteca.js"></script>
   <script src="js/auth.js"></script>
   <script>
     var sessao = exigirLogin();
@@ -60,11 +63,11 @@
         opcaoEscolhida.emoji + " " + opcaoEscolhida.rotulo;
     }
 
-    // filtra o catálogo por humor ou por gênero
-    var itensFiltrados = CATALOGO.filter(function (item) {
-      if (tipo === "humor") return item.humores.indexOf(valor) !== -1;
-      return item.genero === valor;
-    });
+    montarResultados();
+
+    // busca o catálogo unificado no banco, filtrado por humor ou gênero
+    async function montarResultados() {
+    var itensFiltrados = await buscarItens(tipo, valor);
 
     var area = document.getElementById("area-resultados");
 
@@ -113,6 +116,7 @@
       secao.appendChild(grade);
       area.appendChild(secao);
     });
+    }
   </script>
 </body>
 </html>
