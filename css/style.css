@@ -45,17 +45,20 @@ body {
   color: var(--negro);
   font-family: "Arial Black", Arial, "Helvetica Neue", sans-serif;
   padding-left: 36px;
+  position: relative;
 }
 
-/* Faixa vertical decorativa fixa na lateral, texto repetindo e levemente
-   distorcido (referência: brutalismo de cartaz/rave) */
+/* Faixa vertical decorativa que acompanha a altura real da página (não só
+   a tela) — texto repetindo e levemente distorcido, referência brutalismo
+   de cartaz/rave. position:absolute + top/bottom:0 faz ela esticar até o
+   fim do conteúdo, diferente de position:fixed (que só cobre a tela). */
 body::before {
-  content: "CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — ";
-  position: fixed;
+  content: "CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — ";
+  position: absolute;
   top: 0;
+  bottom: 0;
   left: 0;
   width: 36px;
-  height: 100vh;
   writing-mode: vertical-rl;
   transform: skewY(-3deg);
   font-weight: 900;
