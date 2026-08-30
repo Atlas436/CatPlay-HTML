@@ -1,13 +1,13 @@
-/* ===== Paleta brutalista ===== */
+/* ===== Paleta brutalista (fundo escuro + vermelho dominante) ===== */
 :root {
   --negro: #111111;
   --branco: #f4f1ea;
-  --vermelho: #e8291c;
+  --vermelho: #ff2b1f;
   --laranja: #ff6c1a;
   --amarelo: #ffd400;
   --borda: 3px solid var(--negro);
-  --sombra-dura: 6px 6px 0 var(--negro);
-  --sombra-dura-pequena: 3px 3px 0 var(--negro);
+  --sombra-dura: 6px 6px 0 var(--vermelho);
+  --sombra-dura-pequena: 3px 3px 0 var(--vermelho);
 }
 
 /* ===== Transição entre páginas ("página nova sobe por cima da antiga") =====
@@ -41,8 +41,8 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--branco);
-  color: var(--negro);
+  background: var(--negro);
+  color: var(--branco);
   font-family: "Arial Black", Arial, "Helvetica Neue", sans-serif;
   padding-left: 36px;
   position: relative;
@@ -65,7 +65,7 @@ body::before {
   font-size: 1rem;
   letter-spacing: 0.18em;
   color: var(--branco);
-  background: var(--negro);
+  background: var(--vermelho);
   white-space: nowrap;
   overflow: hidden;
   z-index: 20;
@@ -117,7 +117,7 @@ body::after {
   padding: 24px;
   position: relative;
   overflow: hidden;
-  background-image: radial-gradient(rgba(17, 17, 17, 0.1) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(rgba(244, 241, 234, 0.15) 1.5px, transparent 1.5px);
   background-size: 20px 20px;
 }
 
@@ -135,9 +135,15 @@ body::after {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  color: var(--negro);
+  color: var(--branco);
   text-align: center;
   line-height: 1.05;
+}
+
+/* Dentro de cartões brancos, o título volta a ser escuro */
+.caixa .titulo,
+.cartao-perfil .titulo {
+  color: var(--negro);
 }
 
 h1.titulo {
@@ -160,6 +166,7 @@ h1.titulo {
   width: 100%;
   max-width: 380px;
   background: white;
+  color: var(--negro);
   border: var(--borda);
   border-radius: 0;
   box-shadow: var(--sombra-dura);
@@ -411,8 +418,8 @@ button:disabled {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--negro);
-  border-bottom: var(--borda);
+  color: var(--branco);
+  border-bottom: 3px solid var(--vermelho);
   padding-bottom: 8px;
   margin-bottom: 18px;
 }
@@ -426,6 +433,7 @@ button:disabled {
 
 .midia-card {
   background: white;
+  color: var(--negro);
   border: var(--borda);
   border-radius: 0;
   box-shadow: var(--sombra-dura);
@@ -555,6 +563,7 @@ button:disabled {
   width: 100%;
   max-width: 420px;
   background: white;
+  color: var(--negro);
   border: var(--borda);
   border-radius: 0;
   box-shadow: var(--sombra-dura);
