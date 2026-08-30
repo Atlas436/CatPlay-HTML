@@ -22,6 +22,48 @@ async function buscarItens(tipo, valor) {
   }
 }
 
+// ===== Recomendação cruzada entre mídias =====
+// "Gostou desse filme? aqui livros/jogos parecidos" — cruza gênero,
+// humores e tags em comum, só com itens de um TIPO diferente do original.
+async function buscarRecomendacoesCruzadas(item) {
+  try {
+    var resposta = await supabaseClient.from("itens").select("*").neq("id", item.id);
+
+    if (resposta.error) {
+      console.error("Erro ao buscar recomendações cruzadas:", resposta.error);
+      return [];
+    }
+
+    var candidatos = resposta.data.filter(function (candidato) {
+      return candidato.tipo !== item.tipo;
+    });
+
+    candidatos.forEach(function (candidato) {
+      var pontuacao = 0;
+      if (candidato.genero === item.genero) pontuacao += 2;
+      candidato.humores.forEach(function (h) {
+        if (item.humores.indexOf(h) !== -1) pontuacao += 1;
+      });
+      candidato.tags.forEach(function (t) {
+        if (item.tags.indexOf(t) !== -1) pontuacao += 1;
+      });
+      candidato._pontuacao = pontuacao;
+    });
+
+    return candidatos
+      .filter(function (c) {
+        return c._pontuacao > 0;
+      })
+      .sort(function (a, b) {
+        return b._pontuacao - a._pontuacao;
+      })
+      .slice(0, 3);
+  } catch (excecao) {
+    console.error("Falha de conexão ao buscar recomendações cruzadas:", excecao);
+    return [];
+  }
+}
+
 // ===== Biblioteca pessoal (o que o usuário já assistiu/leu/jogou) =====
 
 // Adiciona (ou atualiza, se já existir) um item na biblioteca pessoal

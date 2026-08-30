@@ -119,8 +119,10 @@
           '<div class="controles-biblioteca">' +
           '<select class="select-status">' + opcoesStatusHtml + "</select>" +
           '<button type="button" class="botao botao-secundario botao-adicionar">+ Minha biblioteca</button>' +
+          '<button type="button" class="botao botao-secundario botao-parecidos">Ver parecidos</button>' +
           "</div>" +
-          '<p class="mensagem-biblioteca"></p>';
+          '<p class="mensagem-biblioteca"></p>' +
+          '<div class="recomendacoes-cruzadas"></div>';
 
         var botaoAdicionar = card.querySelector(".botao-adicionar");
         botaoAdicionar.addEventListener("click", async function () {
@@ -133,6 +135,41 @@
             : "Não deu pra adicionar, tenta de novo.";
           mensagem.className = "mensagem-biblioteca " + (ok ? "sucesso" : "erro");
           botaoAdicionar.disabled = false;
+        });
+
+        var botaoParecidos = card.querySelector(".botao-parecidos");
+        var areaParecidos = card.querySelector(".recomendacoes-cruzadas");
+        botaoParecidos.addEventListener("click", async function () {
+          if (areaParecidos.childElementCount > 0) {
+            areaParecidos.innerHTML = "";
+            botaoParecidos.textContent = "Ver parecidos";
+            return;
+          }
+
+          botaoParecidos.disabled = true;
+          botaoParecidos.textContent = "Buscando...";
+          var parecidos = await buscarRecomendacoesCruzadas(item);
+          botaoParecidos.disabled = false;
+          botaoParecidos.textContent = "Esconder parecidos";
+
+          if (parecidos.length === 0) {
+            areaParecidos.innerHTML =
+              '<p class="texto-ajuda">Ainda não achamos nada parecido de outro tipo de mídia.</p>';
+            return;
+          }
+
+          areaParecidos.innerHTML =
+            '<p class="texto-ajuda" style="margin-bottom: 6px">Porque você curtiu isso:</p>' +
+            parecidos
+              .map(function (p) {
+                return (
+                  '<div class="item-parecido">' +
+                  '<span class="tipo-etiqueta">' + p.tipo + "</span>" +
+                  "<strong>" + p.titulo + "</strong>" +
+                  "</div>"
+                );
+              })
+              .join("");
         });
 
         grade.appendChild(card);

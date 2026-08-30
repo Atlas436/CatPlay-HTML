@@ -581,6 +581,25 @@ button:disabled {
   color: var(--vermelho);
 }
 
+.recomendacoes-cruzadas {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-parecido {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid var(--negro);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+.item-parecido .tipo-etiqueta {
+  font-size: 0.6rem;
+  padding: 2px 8px;
+}
+
 .rodape-acoes {
   text-align: center;
   margin-top: 28px;
