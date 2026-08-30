@@ -36,10 +36,12 @@
     </form>
   </div>
 
+  <script src="js/vendor/supabase.js"></script>
+  <script src="js/supabaseClient.js"></script>
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script>
-    document.getElementById("form-cadastro").addEventListener("submit", function (evento) {
+    document.getElementById("form-cadastro").addEventListener("submit", async function (evento) {
       evento.preventDefault();
 
       var nome = document.getElementById("nome").value;
@@ -53,14 +55,14 @@
         return;
       }
 
-      var resultado = cadastrarUsuario(nome, usuario, senha);
+      var resultado = await cadastrarUsuario(nome, usuario, senha);
       if (!resultado.ok) {
         areaErro.innerHTML = '<p class="erro">' + resultado.erro + "</p>";
         return;
       }
 
       // cadastro deu certo: já loga o usuário automaticamente
-      var usuarioCriado = autenticar(usuario, senha);
+      var usuarioCriado = await autenticar(usuario, senha);
       definirSessao(usuarioCriado);
       window.location.href = "mode.html";
     });

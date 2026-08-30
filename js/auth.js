@@ -1,80 +1,60 @@
-// ===== "Banco de dados" de usuários (localStorage) =====
-// Aviso: senha guardada em texto puro só porque é um protótipo escolar,
-// sem back-end/servidor. Num sistema real, a senha nunca fica assim.
+// ===== Autenticação de usuários (Supabase / Postgres) =====
+// Antes o "banco" era o localStorage; agora os dados ficam de verdade
+// num banco na nuvem (Supabase), com senha protegida por hash (bcrypt),
+// aplicado direto no banco pelas funções cadastrar_usuario/atualizar_usuario.
 
-var CHAVE_USUARIOS = "catplay_usuarios";
 var CHAVE_SESSAO = "catplay_sessao";
 
-function obterUsuarios() {
-  var dados = localStorage.getItem(CHAVE_USUARIOS);
-  return dados ? JSON.parse(dados) : [];
-}
-
-function salvarUsuarios(usuarios) {
-  localStorage.setItem(CHAVE_USUARIOS, JSON.stringify(usuarios));
-}
-
-function encontrarUsuario(usuario) {
-  var usuarios = obterUsuarios();
-  var alvo = usuario.trim().toLowerCase();
-  for (var i = 0; i < usuarios.length; i++) {
-    if (usuarios[i].usuario.toLowerCase() === alvo) return usuarios[i];
-  }
-  return null;
-}
-
 // CREATE — cadastrar novo usuário
-function cadastrarUsuario(nome, usuario, senha) {
-  if (encontrarUsuario(usuario)) {
-    return { ok: false, erro: "Esse nome de usuário já está em uso." };
+async function cadastrarUsuario(nome, usuario, senha) {
+  var resposta = await supabaseClient.rpc("cadastrar_usuario", {
+    p_nome: nome.trim(),
+    p_usuario: usuario.trim(),
+    p_senha: senha,
+  });
+
+  if (resposta.error) {
+    return { ok: false, erro: "Erro ao cadastrar. Tente novamente." };
   }
-  var usuarios = obterUsuarios();
-  usuarios.push({ nome: nome.trim(), usuario: usuario.trim(), senha: senha });
-  salvarUsuarios(usuarios);
-  return { ok: true };
+  return resposta.data;
 }
 
 // READ — validar login
-function autenticar(usuario, senha) {
-  var encontrado = encontrarUsuario(usuario);
-  if (encontrado && encontrado.senha === senha) return encontrado;
-  return null;
+async function autenticar(usuario, senha) {
+  var resposta = await supabaseClient.rpc("autenticar_usuario", {
+    p_usuario: usuario.trim(),
+    p_senha: senha,
+  });
+
+  if (resposta.error || !resposta.data.ok) return null;
+  return { id: resposta.data.id, nome: resposta.data.nome, usuario: resposta.data.usuario };
 }
 
 // UPDATE — editar dados do usuário logado
-function atualizarUsuario(usuarioOriginal, novosDados) {
-  var usuarios = obterUsuarios();
-  var alvo = usuarioOriginal.trim().toLowerCase();
+async function atualizarUsuario(usuarioOriginal, novosDados) {
+  var resposta = await supabaseClient.rpc("atualizar_usuario", {
+    p_usuario_atual: usuarioOriginal.trim(),
+    p_novo_nome: novosDados.nome.trim(),
+    p_novo_usuario: novosDados.usuario.trim(),
+    p_nova_senha: novosDados.senha || null,
+  });
 
-  // impede trocar para um nome de usuário que já existe (de outra conta)
-  if (novosDados.usuario.trim().toLowerCase() !== alvo) {
-    var conflito = encontrarUsuario(novosDados.usuario);
-    if (conflito) return { ok: false, erro: "Esse nome de usuário já está em uso." };
-  }
-
-  for (var i = 0; i < usuarios.length; i++) {
-    if (usuarios[i].usuario.toLowerCase() === alvo) {
-      usuarios[i].nome = novosDados.nome.trim();
-      usuarios[i].usuario = novosDados.usuario.trim();
-      if (novosDados.senha) usuarios[i].senha = novosDados.senha;
-      salvarUsuarios(usuarios);
-      return { ok: true, usuario: usuarios[i] };
-    }
-  }
-  return { ok: false, erro: "Usuário não encontrado." };
+  if (resposta.error) return { ok: false, erro: "Erro ao atualizar. Tente novamente." };
+  if (!resposta.data.ok) return resposta.data;
+  return {
+    ok: true,
+    usuario: { id: resposta.data.id, nome: resposta.data.nome, usuario: resposta.data.usuario },
+  };
 }
 
 // DELETE — excluir conta
-function excluirUsuario(usuario) {
-  var usuarios = obterUsuarios();
-  var alvo = usuario.trim().toLowerCase();
-  var restantes = usuarios.filter(function (u) {
-    return u.usuario.toLowerCase() !== alvo;
-  });
-  salvarUsuarios(restantes);
+async function excluirUsuario(usuario) {
+  await supabaseClient.rpc("excluir_usuario", { p_usuario: usuario.trim() });
 }
 
 // ===== Sessão do usuário logado (sessionStorage) =====
+// A sessão (quem está logado nesta aba) continua local — é só uma
+// "lembrança" do navegador. Os dados do usuário em si vêm do banco.
 function definirSessao(usuario) {
   sessionStorage.setItem(CHAVE_SESSAO, JSON.stringify(usuario));
 }

@@ -47,6 +47,8 @@
     </div>
   </main>
 
+  <script src="js/vendor/supabase.js"></script>
+  <script src="js/supabaseClient.js"></script>
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script>
@@ -62,7 +64,7 @@
       window.location.href = "index.html";
     });
 
-    document.getElementById("form-perfil").addEventListener("submit", function (evento) {
+    document.getElementById("form-perfil").addEventListener("submit", async function (evento) {
       evento.preventDefault();
 
       var nome = document.getElementById("nome").value;
@@ -70,7 +72,7 @@
       var senha = document.getElementById("senha").value;
       var areaMensagem = document.getElementById("area-mensagem");
 
-      var resultado = atualizarUsuario(sessao.usuario, {
+      var resultado = await atualizarUsuario(sessao.usuario, {
         nome: nome,
         usuario: usuario,
         senha: senha,
@@ -86,13 +88,13 @@
       areaMensagem.innerHTML = '<p class="sucesso">Dados atualizados com sucesso!</p>';
     });
 
-    document.getElementById("botao-excluir").addEventListener("click", function () {
+    document.getElementById("botao-excluir").addEventListener("click", async function () {
       var confirmou = window.confirm(
         "Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita."
       );
       if (!confirmou) return;
 
-      excluirUsuario(sessao.usuario);
+      await excluirUsuario(sessao.usuario);
       encerrarSessao();
       window.location.href = "index.html";
     });

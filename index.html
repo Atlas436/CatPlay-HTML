@@ -29,6 +29,8 @@
     </form>
   </div>
 
+  <script src="js/vendor/supabase.js"></script>
+  <script src="js/supabaseClient.js"></script>
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script>
@@ -37,12 +39,12 @@
       window.location.href = "mode.html";
     }
 
-    document.getElementById("form-login").addEventListener("submit", function (evento) {
+    document.getElementById("form-login").addEventListener("submit", async function (evento) {
       evento.preventDefault();
       var usuario = document.getElementById("usuario").value;
       var senha = document.getElementById("senha").value;
 
-      var encontrado = autenticar(usuario, senha);
+      var encontrado = await autenticar(usuario, senha);
       var areaErro = document.getElementById("area-erro");
 
       if (!encontrado) {
