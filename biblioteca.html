@@ -69,6 +69,7 @@
 
         var card = document.createElement("article");
         card.className = "midia-card";
+        card.setAttribute("data-codigo", "CP-" + String(item.id).padStart(4, "0"));
 
         var opcoesStatusHtml = STATUS_BIBLIOTECA.map(function (s) {
           var selecionado = s.chave === registro.status ? " selected" : "";

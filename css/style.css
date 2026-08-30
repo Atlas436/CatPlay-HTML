@@ -44,6 +44,65 @@ body {
   background: var(--branco);
   color: var(--negro);
   font-family: "Arial Black", Arial, "Helvetica Neue", sans-serif;
+  padding-left: 36px;
+}
+
+/* Faixa vertical decorativa fixa na lateral, texto repetindo e levemente
+   distorcido (referência: brutalismo de cartaz/rave) */
+body::before {
+  content: "CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — ";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 100vh;
+  writing-mode: vertical-rl;
+  transform: skewY(-3deg);
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  color: var(--branco);
+  background: var(--negro);
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 20;
+  pointer-events: none;
+  animation: marquee-vertical 16s linear infinite;
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: skewY(-3deg) translateY(0);
+  }
+  to {
+    transform: skewY(-3deg) translateY(-50%);
+  }
+}
+
+/* Selo fixo no rodapé, tipo carimbo de produto */
+body::after {
+  content: "CATPLAY+ · PROTÓTIPO";
+  position: fixed;
+  bottom: 10px;
+  right: 14px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--negro);
+  background: var(--amarelo);
+  border: 2px solid var(--negro);
+  padding: 3px 8px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  body {
+    padding-left: 0;
+  }
+  body::before {
+    display: none;
+  }
 }
 
 .tela {
@@ -53,6 +112,43 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px;
+  position: relative;
+  overflow: hidden;
+  background-image: radial-gradient(rgba(17, 17, 17, 0.1) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+.tela::before {
+  content: "";
+  position: absolute;
+  top: 50px;
+  right: 60px;
+  width: 90px;
+  height: 90px;
+  border: 3px solid var(--laranja);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.tela::after {
+  content: "";
+  position: absolute;
+  bottom: 60px;
+  left: 50px;
+  width: 34px;
+  height: 34px;
+  background:
+    linear-gradient(var(--vermelho), var(--vermelho)) center / 100% 30%,
+    linear-gradient(var(--vermelho), var(--vermelho)) center / 30% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .tela::before,
+  .tela::after {
+    display: none;
+  }
 }
 
 .logo {
@@ -302,6 +398,12 @@ button:disabled {
   display: block;
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
+.opcao-card:nth-child(odd) {
+  transform: rotate(-1.2deg);
+}
+.opcao-card:nth-child(even) {
+  transform: rotate(1.2deg);
+}
 .opcao-card .emoji {
   display: block;
   font-size: 2.2rem;
@@ -309,7 +411,7 @@ button:disabled {
 }
 .opcao-card:hover {
   background: var(--amarelo);
-  transform: translate(-2px, -2px);
+  transform: rotate(0deg) translate(-2px, -2px);
   box-shadow: 8px 8px 0 var(--negro);
 }
 
@@ -353,10 +455,34 @@ button:disabled {
   border: var(--borda);
   border-radius: 0;
   box-shadow: var(--sombra-dura);
-  padding: 18px;
+  padding: 18px 18px 30px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: relative;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.midia-card:nth-child(odd) {
+  transform: rotate(-0.6deg);
+}
+.midia-card:nth-child(even) {
+  transform: rotate(0.6deg);
+}
+.midia-card:hover {
+  transform: rotate(0deg) translate(-2px, -2px);
+  box-shadow: 9px 9px 0 var(--negro);
+}
+
+.midia-card::after {
+  content: attr(data-codigo);
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--negro);
+  opacity: 0.4;
 }
 
 .midia-card .cabecalho-card {

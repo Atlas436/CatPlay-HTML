@@ -97,6 +97,7 @@
       itensDoTipo.forEach(function (item) {
         var card = document.createElement("article");
         card.className = "midia-card";
+        card.setAttribute("data-codigo", "CP-" + String(item.id).padStart(4, "0"));
 
         var tagsHtml = item.tags
           .map(function (tag) {
