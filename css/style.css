@@ -332,6 +332,38 @@ button:disabled {
   text-align: center;
 }
 
+.controles-biblioteca {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.controles-biblioteca select {
+  border: 1px solid var(--cor-secundaria-escura);
+  background: var(--cor-creme-clara);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  color: var(--cor-tinta);
+}
+
+.controles-biblioteca .botao {
+  font-size: 0.85rem;
+  padding: 8px 14px;
+}
+
+.mensagem-biblioteca {
+  font-size: 0.8rem;
+  margin: 0;
+}
+.mensagem-biblioteca.sucesso {
+  color: var(--cor-secundaria-escura);
+}
+.mensagem-biblioteca.erro {
+  color: #932f28;
+}
+
 .rodape-acoes {
   text-align: center;
   margin-top: 28px;

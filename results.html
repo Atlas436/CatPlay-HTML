@@ -13,6 +13,7 @@
       <img src="assets/logo.svg" alt="CatPlay+" />
     </a>
     <nav>
+      <a href="biblioteca.html">Minha biblioteca</a>
       <a href="perfil.html">Meu perfil</a>
       <button class="link" id="botao-sair">Sair</button>
     </nav>
@@ -102,13 +103,35 @@
           })
           .join("");
 
+        var opcoesStatusHtml = STATUS_BIBLIOTECA.map(function (s) {
+          return '<option value="' + s.chave + '">' + s.rotulo + "</option>";
+        }).join("");
+
         card.innerHTML =
           '<div class="cabecalho-card">' +
           "<h3>" + item.titulo + "</h3>" +
           '<span class="tipo-etiqueta">' + item.tipo + "</span>" +
           "</div>" +
           "<p>" + item.sinopse + "</p>" +
-          '<div class="tags">' + tagsHtml + "</div>";
+          '<div class="tags">' + tagsHtml + "</div>" +
+          '<div class="controles-biblioteca">' +
+          '<select class="select-status">' + opcoesStatusHtml + "</select>" +
+          '<button type="button" class="botao botao-secundario botao-adicionar">+ Minha biblioteca</button>' +
+          "</div>" +
+          '<p class="mensagem-biblioteca"></p>';
+
+        var botaoAdicionar = card.querySelector(".botao-adicionar");
+        botaoAdicionar.addEventListener("click", async function () {
+          var statusEscolhido = card.querySelector(".select-status").value;
+          var mensagem = card.querySelector(".mensagem-biblioteca");
+          botaoAdicionar.disabled = true;
+          var ok = await adicionarNaBiblioteca(sessao.id, item.id, statusEscolhido);
+          mensagem.textContent = ok
+            ? "Adicionado à sua biblioteca!"
+            : "Não deu pra adicionar, tenta de novo.";
+          mensagem.className = "mensagem-biblioteca " + (ok ? "sucesso" : "erro");
+          botaoAdicionar.disabled = false;
+        });
 
         grade.appendChild(card);
       });

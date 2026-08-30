@@ -22,3 +22,9 @@ var ROTULOS_TIPO = {
   Livro: "Livros",
   "Filme/Série": "Filmes / Séries",
 };
+
+var STATUS_BIBLIOTECA = [
+  { chave: "quero_ver", rotulo: "Quero ver" },
+  { chave: "em_andamento", rotulo: "Em andamento" },
+  { chave: "concluido", rotulo: "Concluído" },
+];

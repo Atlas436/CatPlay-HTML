@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CatPlay+ | Minha biblioteca</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="barra-topo">
+    <a class="marca" href="mode.html">
+      <img src="assets/logo.svg" alt="CatPlay+" />
+    </a>
+    <nav>
+      <a href="mode.html">Início</a>
+      <a href="perfil.html">Meu perfil</a>
+      <button class="link" id="botao-sair">Sair</button>
+    </nav>
+  </header>
+
+  <main class="conteudo">
+    <div class="centralizado" style="margin-bottom: 40px">
+      <h1 class="titulo">Minha biblioteca</h1>
+      <p class="subtitulo">Tudo que você já assistiu, leu ou jogou (ou pretende)</p>
+    </div>
+
+    <div id="area-biblioteca"></div>
+  </main>
+
+  <script src="js/vendor/supabase.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/biblioteca.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    var sessao = exigirLogin();
+
+    document.getElementById("botao-sair").addEventListener("click", function () {
+      encerrarSessao();
+      window.location.href = "index.html";
+    });
+
+    var area = document.getElementById("area-biblioteca");
+
+    function rotuloStatus(chave) {
+      var item = STATUS_BIBLIOTECA.filter(function (s) {
+        return s.chave === chave;
+      })[0];
+      return item ? item.rotulo : chave;
+    }
+
+    async function montarBiblioteca() {
+      var registros = await obterMinhaBiblioteca(sessao.id);
+
+      if (registros.length === 0) {
+        area.innerHTML =
+          '<p class="centralizado">Sua biblioteca está vazia por enquanto. Vá em "Início" e adicione algo às suas recomendações!</p>';
+        return;
+      }
+
+      var grade = document.createElement("div");
+      grade.className = "grade-cards";
+
+      registros.forEach(function (registro) {
+        var item = registro.itens;
+        if (!item) return; // item pode ter sido removido do catálogo
+
+        var card = document.createElement("article");
+        card.className = "midia-card";
+
+        var opcoesStatusHtml = STATUS_BIBLIOTECA.map(function (s) {
+          var selecionado = s.chave === registro.status ? " selected" : "";
+          return '<option value="' + s.chave + '"' + selecionado + ">" + s.rotulo + "</option>";
+        }).join("");
+
+        card.innerHTML =
+          '<div class="cabecalho-card">' +
+          "<h3>" + item.titulo + "</h3>" +
+          '<span class="tipo-etiqueta">' + item.tipo + "</span>" +
+          "</div>" +
+          "<p>" + item.sinopse + "</p>" +
+          '<div class="controles-biblioteca">' +
+          '<select class="select-status">' + opcoesStatusHtml + "</select>" +
+          '<button type="button" class="botao botao-perigo botao-remover">Remover</button>' +
+          "</div>";
+
+        card.querySelector(".select-status").addEventListener("change", async function (evento) {
+          await atualizarStatusBiblioteca(registro.id, evento.target.value);
+        });
+
+        card.querySelector(".botao-remover").addEventListener("click", async function () {
+          var confirmou = window.confirm("Remover \"" + item.titulo + "\" da sua biblioteca?");
+          if (!confirmou) return;
+          await removerDaBiblioteca(registro.id);
+          card.remove();
+        });
+
+        grade.appendChild(card);
+      });
+
+      area.innerHTML = "";
+      area.appendChild(grade);
+    }
+
+    montarBiblioteca();
+  </script>
+</body>
+</html>
