@@ -121,39 +121,6 @@ body::after {
   background-size: 20px 20px;
 }
 
-.tela::before {
-  content: "";
-  position: absolute;
-  top: 50px;
-  right: 60px;
-  width: 90px;
-  height: 90px;
-  border: 3px solid var(--laranja);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.tela::after {
-  content: "";
-  position: absolute;
-  bottom: 60px;
-  left: 50px;
-  width: 34px;
-  height: 34px;
-  background:
-    linear-gradient(var(--vermelho), var(--vermelho)) center / 100% 30%,
-    linear-gradient(var(--vermelho), var(--vermelho)) center / 30% 100%;
-  background-repeat: no-repeat;
-  pointer-events: none;
-}
-
-@media (max-width: 640px) {
-  .tela::before,
-  .tela::after {
-    display: none;
-  }
-}
-
 .logo {
   width: 200px;
   max-width: 60vw;
