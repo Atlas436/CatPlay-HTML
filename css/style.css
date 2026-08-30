@@ -41,10 +41,17 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--negro);
+  background-color: var(--negro);
+  background-image:
+    radial-gradient(rgba(244, 241, 234, 0.12) 1.5px, transparent 1.5px),
+    url("../assets/textura-fundo.svg");
+  background-repeat: repeat, no-repeat;
+  background-position: 0 0, top right;
+  background-size: 20px 20px, min(70vw, 520px) auto;
+  background-attachment: scroll, fixed;
   color: var(--branco);
   font-family: "Arial Black", Arial, "Helvetica Neue", sans-serif;
-  padding-left: 36px;
+  padding-left: 46px;
   position: relative;
 }
 
@@ -53,19 +60,22 @@ body {
    de cartaz/rave. position:absolute + top/bottom:0 faz ela esticar até o
    fim do conteúdo, diferente de position:fixed (que só cobre a tela). */
 body::before {
-  content: "CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — CATPLAY — ";
+  content: "★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ ";
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
-  width: 36px;
+  width: 40px;
   writing-mode: vertical-rl;
+  text-align: center;
   transform: skewY(-3deg);
   font-weight: 900;
   font-size: 1rem;
   letter-spacing: 0.18em;
   color: var(--branco);
   background: var(--vermelho);
+  border-left: 3px dotted var(--branco);
+  border-right: 3px dotted var(--branco);
   white-space: nowrap;
   overflow: hidden;
   z-index: 20;
@@ -116,9 +126,6 @@ body::after {
   justify-content: center;
   padding: 24px;
   position: relative;
-  overflow: hidden;
-  background-image: radial-gradient(rgba(244, 241, 234, 0.15) 1.5px, transparent 1.5px);
-  background-size: 20px 20px;
 }
 
 .logo {
