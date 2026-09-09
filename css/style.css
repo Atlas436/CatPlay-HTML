@@ -44,7 +44,7 @@ body {
   background-color: var(--negro);
   background-image:
     radial-gradient(rgba(244, 241, 234, 0.12) 1.5px, transparent 1.5px),
-    url("../assets/carinhas-fundo.svg"),
+    url("../assets/carinhas-fundo-claro.svg"),
     url("../assets/textura-fundo.svg");
   background-repeat: repeat, repeat, no-repeat;
   background-position: 0 0, 0 0, top right;
@@ -321,7 +321,7 @@ button:disabled {
   justify-content: space-between;
   padding: 16px 28px;
   background-color: var(--branco);
-  background-image: url("../assets/carinhas-fundo.svg");
+  background-image: url("../assets/carinhas-fundo-escuro.svg");
   background-repeat: repeat;
   background-size: 200px 200px;
   border-bottom: var(--borda);
