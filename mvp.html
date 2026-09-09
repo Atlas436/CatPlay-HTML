@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CatPlay+</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #0b0d12;
+    color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* =========================
+   TELAS
+========================= */
+
+.tela {
+    display: none;
+    min-height: 100vh;
+}
+
+.tela.ativa {
+    display: block;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 420px;
+    background: #151923;
+    border: 1px solid #303746;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 0 30px rgba(80, 120, 255, 0.15);
+}
+
+.logo {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.logo span {
+    color: #6ea8ff;
+}
+
+.login-box h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-box p {
+    text-align: center;
+    color: #9ba3b4;
+    margin-bottom: 30px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #343b4a;
+    background: #0e1118;
+    color: white;
+    outline: none;
+}
+
+input:focus {
+    border-color: #6ea8ff;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 13px 18px;
+    font-weight: bold;
+    transition: .2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.btn-principal {
+    width: 100%;
+    background: #4d82ff;
+    color: white;
+}
+
+.btn-secundario {
+    background: #252c39;
+    color: white;
+}
+
+.btn-perigo {
+    background: #b83b4b;
+    color: white;
+}
+
+.trocar {
+    margin-top: 20px;
+    text-align: center;
+    color: #6ea8ff;
+    cursor: pointer;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    height: 70px;
+    background: #11141c;
+    border-bottom: 1px solid #292f3a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6%;
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-logo span {
+    color: #6ea8ff;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-menu button {
+    background: transparent;
+    color: #ddd;
+}
+
+.nav-menu button:hover {
+    background: #202633;
+}
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+    padding: 50px 0;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero h1 span {
+    color: #6ea8ff;
+}
+
+.hero p {
+    color: #9ba3b4;
+    font-size: 18px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.opcoes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card-opcao {
+    background: #151923;
+    border: 1px solid #303746;
+    border-radius: 18px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.card-opcao:hover {
+    transform: translateY(-6px);
+    border-color: #6ea8ff;
+    box-shadow: 0 0 25px rgba(80, 120, 255, .15);
+}
+
+.card-opcao .emoji {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.card-opcao h3 {
+    margin-bottom: 8px;
+}
+
+.card-opcao p {
+    color: #929aaa;
+}
+
+/* =========================
+   RECOMENDAÇÕES
+========================= */
+
+.resultados {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.midia {
+    background: #151923;
+    border: 1px solid #303746;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.midia:hover {
+    transform: translateY(-5px);
+}
+
+.capa {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    background: linear-gradient(135deg, #18243d, #11151e);
+}
+
+.midia-info {
+    padding: 20px;
+}
+
+.midia-info h3 {
+    margin-bottom: 8px;
+}
+
+.tipo {
+    color: #6ea8ff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.sinopse {
+    color: #9da5b5;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.tag {
+    display: inline-block;
+    background: #252d3c;
+    color: #b8c8ff;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin: 2px;
+}
+
+.favorito {
+    margin-top: 15px;
+    width: 100%;
+    background: #252c39;
+    color: white;
+}
+
+/* =========================
+   PERFIL
+========================= */
+
+.perfil {
+    max-width: 600px;
+    margin: auto;
+    background: #151923;
+    padding: 30px;
+    border-radius: 18px;
+    border: 1px solid #303746;
+}
+
+.perfil h2 {
+    margin-bottom: 25px;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width: 600px) {
+
+    .navbar {
+        height: auto;
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<section id="loginTela" class="tela ativa">
+
+    <div class="login-container">
+
+        <div class="login-box">
+
+            <div class="logo">🐾</div>
+
+            <h1>Cat<span>Play+</span></h1>
+
+            <p id="textoLogin">
+                Descubra seu próximo entretenimento.
+            </p>
+
+            <input
+                type="text"
+                id="usuario"
+                placeholder="Usuário"
+            >
+
+            <input
+                type="password"
+                id="senha"
+                placeholder="Senha"
+            >
+
+            <button
+                class="btn-principal"
+                onclick="entrar()"
+            >
+                Entrar
+            </button>
+
+            <div
+                class="trocar"
+                onclick="mostrarCadastro()"
+            >
+                Criar uma conta
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CADASTRO
+===================================================== -->
+
+<section id="cadastroTela" class="tela">
+
+    <div class="login-container">
+
+        <div class="login-box">
+
+            <div class="logo">🐱</div>
+
+            <h1>Criar conta</h1>
+
+            <p>Faça seu cadastro no CatPlay+</p>
+
+            <input
+                type="text"
+                id="novoUsuario"
+                placeholder="Escolha um usuário"
+            >
+
+            <input
+                type="password"
+                id="novaSenha"
+                placeholder="Crie uma senha"
+            >
+
+            <button
+                class="btn-principal"
+                onclick="cadastrar()"
+            >
+                Criar conta
+            </button>
+
+            <div
+                class="trocar"
+                onclick="mostrarLogin()"
+            >
+                Já tenho uma conta
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     APLICAÇÃO
+===================================================== -->
+
+<section id="appTela" class="tela">
+
+    <nav class="navbar">
+
+        <div class="nav-logo">
+            🐾 Cat<span>Play+</span>
+        </div>
+
+        <div class="nav-menu">
+
+            <button onclick="mostrarHome()">
+                Início
+            </button>
+
+            <button onclick="mostrarFavoritos()">
+                ❤️ Favoritos
+            </button>
+
+            <button onclick="mostrarPerfil()">
+                👤 Perfil
+            </button>
+
+            <button onclick="sair()">
+                Sair
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- HOME -->
+
+    <div id="home" class="container">
+
+        <div class="hero">
+
+            <h1>
+                Descubra seu <span>próximo som</span>...
+            </h1>
+
+            <p>
+                Escolha seu humor ou gênero e encontre algo novo para assistir,
+                jogar ou ler.
+            </p>
+
+        </div>
+
+        <h2 style="margin-bottom:20px;">
+            Como você está se sentindo?
+        </h2>
+
+        <div class="opcoes">
+
+            <div
+                class="card-opcao"
+                onclick="buscar('relaxar')"
+            >
+                <div class="emoji">😌</div>
+                <h3>Quero relaxar</h3>
+                <p>Algo tranquilo para aproveitar.</p>
+            </div>
+
+            <div
+                class="card-opcao"
+                onclick="buscar('adrenalina')"
+            >
+                <div class="emoji">⚡</div>
+                <h3>Quero adrenalina</h3>
+                <p>Ação, aventura e emoção.</p>
+            </div>
+
+            <div
+                class="card-opcao"
+                onclick="buscar('emocao')"
+            >
+                <div class="emoji">😭</div>
+                <h3>Quero me emocionar</h3>
+                <p>Histórias que mexem com você.</p>
+            </div>
+
+            <div
+                class="card-opcao"
+                onclick="buscar('pensar')"
+            >
+                <div class="emoji">🧠</div>
+                <h3>Quero pensar</h3>
+                <p>Histórias para refletir.</p>
+            </div>
+
+        </div>
+
+
+        <h2 style="margin:50px 0 20px;">
+            Ou escolha um gênero
+        </h2>
+
+        <div class="opcoes">
+
+            <div
+                class="card-opcao"
+                onclick="buscar('terror')"
+            >
+                <div class="emoji">👻</div>
+                <h3>Terror</h3>
+            </div>
+
+            <div
+                class="card-opcao"
+                onclick="buscar('romance')"
+            >
+                <div class="emoji">❤️</div>
+                <h3>Romance</h3>
+            </div>
+
+            <div
+                class="card-opcao"
+                onclick="buscar('ficcao')"
+            >
+                <div class="emoji">🚀</div>
+                <h3>Ficção Científica</h3>
+            </div>
+
+            <div
+                class="card-opcao"
+                onclick="buscar('aventura')"
+            >
+                <div class="emoji">🗺️</div>
+                <h3>Aventura</h3>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULTADOS -->
+
+    <div
+        id="resultadosTela"
+        class="container"
+        style="display:none;"
+    >
+
+        <div class="hero">
+
+            <h1>
+                Recomendações ✨
+            </h1>
+
+            <p id="resultadoTexto"></p>
+
+        </div>
+
+        <div
+            id="resultados"
+            class="resultados"
+        ></div>
+
+        <br><br>
+
+        <button
+            class="btn-secundario"
+            onclick="mostrarHome()"
+        >
+            ← Fazer outra busca
+        </button>
+
+    </div>
+
+
+    <!-- FAVORITOS -->
+
+    <div
+        id="favoritosTela"
+        class="container"
+        style="display:none;"
+    >
+
+        <div class="hero">
+
+            <h1>
+                ❤️ Meus favoritos
+            </h1>
+
+            <p>
+                Obras que você salvou.
+            </p>
+
+        </div>
+
+        <div
+            id="listaFavoritos"
+            class="resultados"
+        ></div>
+
+    </div>
+
+
+    <!-- PERFIL -->
+
+    <div
+        id="perfilTela"
+        class="container"
+        style="display:none;"
+    >
+
+        <div class="perfil">
+
+            <h2>👤 Meu perfil</h2>
+
+            <label>Usuário</label>
+
+            <input
+                type="text"
+                id="editarUsuario"
+            >
+
+            <label>Nova senha</label>
+
+            <input
+                type="password"
+                id="editarSenha"
+                placeholder="Digite uma nova senha"
+            >
+
+            <button
+                class="btn-principal"
+                onclick="atualizarPerfil()"
+            >
+                Salvar alterações
+            </button>
+
+            <br><br>
+
+            <button
+                class="btn-perigo"
+                onclick="excluirConta()"
+            >
+                Excluir minha conta
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* =====================================================
+   BANCO DE DADOS LOCAL
+===================================================== */
+
+let usuarios =
+    JSON.parse(localStorage.getItem("catplay_usuarios")) || [];
+
+let usuarioAtual =
+    sessionStorage.getItem("catplay_usuario");
+
+
+/* =====================================================
+   CATÁLOGO
+===================================================== */
+
+const catalogo = [
+
+{
+    titulo: "Stranger Things",
+    tipo: "Série",
+    emoji: "👾",
+    humor: ["adrenalina", "pensar"],
+    genero: ["ficcao", "terror"],
+    sinopse: "Uma aventura envolvendo mistérios, amizade e acontecimentos sobrenaturais.",
+    tags: ["Ficção", "Suspense"]
+},
+
+{
+    titulo: "Interestelar",
+    tipo: "Filme",
+    emoji: "🚀",
+    humor: ["pensar", "emocao"],
+    genero: ["ficcao"],
+    sinopse: "Uma história de exploração espacial envolvendo ciência, tempo e relações humanas.",
+    tags: ["Espaço", "Ficção"]
+},
+
+{
+    titulo: "O Senhor dos Anéis",
+    tipo: "Livro",
+    emoji: "💍",
+    humor: ["adrenalina", "pensar"],
+    genero: ["aventura"],
+    sinopse: "Uma grande jornada por um mundo de fantasia, amizade e batalhas.",
+    tags: ["Fantasia", "Aventura"]
+},
+
+{
+    titulo: "Coraline",
+    tipo: "Livro",
+    emoji: "🚪",
+    humor: ["pensar"],
+    genero: ["terror"],
+    sinopse: "Uma garota encontra uma passagem para uma realidade estranha e misteriosa.",
+    tags: ["Terror", "Fantasia"]
+},
+
+{
+    titulo: "Minecraft",
+    tipo: "Jogo",
+    emoji: "⛏️",
+    humor: ["relaxar", "aventura"],
+    genero: ["aventura"],
+    sinopse: "Explore, construa e crie sua própria aventura em um mundo aberto.",
+    tags: ["Sandbox", "Aventura"]
+},
+
+{
+    titulo: "The Last of Us",
+    tipo: "Série",
+    emoji: "🍄",
+    humor: ["emocao", "adrenalina"],
+    genero: ["aventura"],
+    sinopse: "Uma jornada intensa de sobrevivência e relações humanas.",
+    tags: ["Drama", "Aventura"]
+},
+
+{
+    titulo: "Diário de uma Paixão",
+    tipo: "Filme",
+    emoji: "💌",
+    humor: ["emocao"],
+    genero: ["romance"],
+    sinopse: "Uma história sobre amor, escolhas e memórias.",
+    tags: ["Romance", "Drama"]
+},
+
+{
+    titulo: "Stray",
+    tipo: "Jogo",
+    emoji: "🐈",
+    humor: ["relaxar", "aventura"],
+    genero: ["aventura"],
+    sinopse: "Explore uma cidade misteriosa assumindo o controle de um gato.",
+    tags: ["Gato", "Aventura"]
+},
+
+{
+    titulo: "Duna",
+    tipo: "Livro",
+    emoji: "🏜️",
+    humor: ["pensar"],
+    genero: ["ficcao"],
+    sinopse: "Uma grande história de política, poder e sobrevivência em um planeta desértico.",
+    tags: ["Ficção", "Política"]
+}
+
+];
+
+
+/* =====================================================
+   CADASTRO
+===================================================== */
+
+function cadastrar() {
+
+    const usuario =
+        document.getElementById("novoUsuario").value.trim();
+
+    const senha =
+        document.getElementById("novaSenha").value;
+
+    if (!usuario || !senha) {
+        alert("Preencha todos os campos.");
+        return;
+    }
+
+    const existe =
+        usuarios.find(u => u.usuario === usuario);
+
+    if (existe) {
+        alert("Esse usuário já existe.");
+        return;
+    }
+
+    usuarios.push({
+        usuario: usuario,
+        senha: senha,
+        favoritos: []
+    });
+
+    localStorage.setItem(
+        "catplay_usuarios",
+        JSON.stringify(usuarios)
+    );
+
+    alert("Conta criada com sucesso!");
+
+    mostrarLogin();
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function entrar() {
+
+    const usuario =
+        document.getElementById("usuario").value.trim();
+
+    const senha =
+        document.getElementById("senha").value;
+
+    const encontrado =
+        usuarios.find(
+            u =>
+            u.usuario === usuario &&
+            u.senha === senha
+        );
+
+    if (!encontrado) {
+        alert("Usuário ou senha incorretos.");
+        return;
+    }
+
+    usuarioAtual = usuario;
+
+    sessionStorage.setItem(
+        "catplay_usuario",
+        usuario
+    );
+
+    abrirAplicacao();
+}
+
+
+/* =====================================================
+   TELAS DE LOGIN
+===================================================== */
+
+function mostrarCadastro() {
+
+    document
+        .getElementById("loginTela")
+        .classList.remove("ativa");
+
+    document
+        .getElementById("cadastroTela")
+        .classList.add("ativa");
+}
+
+
+function mostrarLogin() {
+
+    document
+        .getElementById("cadastroTela")
+        .classList.remove("ativa");
+
+    document
+        .getElementById("loginTela")
+        .classList.add("ativa");
+}
+
+
+/* =====================================================
+   ABRIR APLICAÇÃO
+===================================================== */
+
+function abrirAplicacao() {
+
+    document
+        .getElementById("loginTela")
+        .classList.remove("ativa");
+
+    document
+        .getElementById("cadastroTela")
+        .classList.remove("ativa");
+
+    document
+        .getElementById("appTela")
+        .classList.add("ativa");
+
+    mostrarHome();
+}
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+function esconderPaginas() {
+
+    document.getElementById("home").style.display = "none";
+
+    document.getElementById("resultadosTela").style.display = "none";
+
+    document.getElementById("favoritosTela").style.display = "none";
+
+    document.getElementById("perfilTela").style.display = "none";
+}
+
+
+function mostrarHome() {
+
+    esconderPaginas();
+
+    document.getElementById("home").style.display = "block";
+}
+
+
+/* =====================================================
+   BUSCA
+===================================================== */
+
+function buscar(preferencia) {
+
+    esconderPaginas();
+
+    let resultados = catalogo.filter(item =>
+
+        item.humor.includes(preferencia) ||
+        item.genero.includes(preferencia)
+
+    );
+
+    document.getElementById("resultadoTexto").innerText =
+        "Encontramos algumas opções para você.";
+
+    const container =
+        document.getElementById("resultados");
+
+    container.innerHTML = "";
+
+    resultados.forEach(item => {
+
+        container.innerHTML += criarCard(item);
+
+    });
+
+    document.getElementById("resultadosTela").style.display = "block";
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+function criarCard(item) {
+
+    return `
+
+        <div class="midia">
+
+            <div class="capa">
+                ${item.emoji}
+            </div>
+
+            <div class="midia-info">
+
+                <div class="tipo">
+                    ${item.tipo}
+                </div>
+
+                <h3>
+                    ${item.titulo}
+                </h3>
+
+                <p class="sinopse">
+                    ${item.sinopse}
+                </p>
+
+                <div>
+                    ${item.tags.map(tag =>
+                        `<span class="tag">#${tag}</span>`
+                    ).join("")}
+                </div>
+
+                <button
+                    class="favorito"
+                    onclick="adicionarFavorito('${item.titulo}')"
+                >
+                    ❤️ Adicionar aos favoritos
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   FAVORITOS
+===================================================== */
+
+function adicionarFavorito(titulo) {
+
+    let usuario =
+        usuarios.find(u => u.usuario === usuarioAtual);
+
+    if (!usuario) return;
+
+    if (!usuario.favoritos.includes(titulo)) {
+
+        usuario.favoritos.push(titulo);
+
+        localStorage.setItem(
+            "catplay_usuarios",
+            JSON.stringify(usuarios)
+        );
+
+        alert("Adicionado aos favoritos!");
+
+    } else {
+
+        alert("Esse item já está nos favoritos.");
+
+    }
+}
+
+
+function mostrarFavoritos() {
+
+    esconderPaginas();
+
+    const usuario =
+        usuarios.find(u => u.usuario === usuarioAtual);
+
+    const container =
+        document.getElementById("listaFavoritos");
+
+    container.innerHTML = "";
+
+    if (!usuario || usuario.favoritos.length === 0) {
+
+        container.innerHTML = `
+            <p style="color:#999;">
+                Você ainda não possui favoritos.
+            </p>
+        `;
+
+    } else {
+
+        usuario.favoritos.forEach(titulo => {
+
+            const item =
+                catalogo.find(i => i.titulo === titulo);
+
+            if (item) {
+                container.innerHTML += criarCard(item);
+            }
+
+        });
+
+    }
+
+    document.getElementById("favoritosTela").style.display = "block";
+}
+
+
+/* =====================================================
+   PERFIL
+===================================================== */
+
+function mostrarPerfil() {
+
+    esconderPaginas();
+
+    const usuario =
+        usuarios.find(u => u.usuario === usuarioAtual);
+
+    if (!usuario) return;
+
+    document.getElementById("editarUsuario").value =
+        usuario.usuario;
+
+    document.getElementById("editarSenha").value =
+        usuario.senha;
+
+    document.getElementById("perfilTela").style.display = "block";
+}
+
+
+function atualizarPerfil() {
+
+    const usuario =
+        usuarios.find(u => u.usuario === usuarioAtual);
+
+    const novoNome =
+        document.getElementById("editarUsuario").value.trim();
+
+    const novaSenha =
+        document.getElementById("editarSenha").value;
+
+    if (!novoNome || !novaSenha) {
+
+        alert("Preencha todos os campos.");
+
+        return;
+    }
+
+    usuario.usuario = novoNome;
+    usuario.senha = novaSenha;
+
+    usuarioAtual = novoNome;
+
+    sessionStorage.setItem(
+        "catplay_usuario",
+        novoNome
+    );
+
+    localStorage.setItem(
+        "catplay_usuarios",
+        JSON.stringify(usuarios)
+    );
+
+    alert("Perfil atualizado!");
+
+}
+
+
+/* =====================================================
+   EXCLUIR CONTA
+===================================================== */
+
+function excluirConta() {
+
+    const confirmar =
+        confirm(
+            "Tem certeza que deseja excluir sua conta?"
+        );
+
+    if (!confirmar) return;
+
+    usuarios =
+        usuarios.filter(
+            u => u.usuario !== usuarioAtual
+        );
+
+    localStorage.setItem(
+        "catplay_usuarios",
+        JSON.stringify(usuarios)
+    );
+
+    sessionStorage.removeItem(
+        "catplay_usuario"
+    );
+
+    usuarioAtual = null;
+
+    document
+        .getElementById("appTela")
+        .classList.remove("ativa");
+
+    document
+        .getElementById("loginTela")
+        .classList.add("ativa");
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function sair() {
+
+    sessionStorage.removeItem(
+        "catplay_usuario"
+    );
+
+    usuarioAtual = null;
+
+    document
+        .getElementById("appTela")
+        .classList.remove("ativa");
+
+    document
+        .getElementById("loginTela")
+        .classList.add("ativa");
+
+}
+
+
+/* =====================================================
+   LOGIN AUTOMÁTICO
+===================================================== */
+
+if (usuarioAtual) {
+
+    const existe =
+        usuarios.find(
+            u => u.usuario === usuarioAtual
+        );
+
+    if (existe) {
+        abrirAplicacao();
+    }
+
+}
+
+</script>
+
+</body>
+</html>
