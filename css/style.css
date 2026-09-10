@@ -60,11 +60,9 @@ body {
    a tela) — texto repetindo e levemente distorcido, referência brutalismo
    de cartaz/rave. position:absolute + top/bottom:0 faz ela esticar até o
    fim do conteúdo, diferente de position:fixed (que só cobre a tela). */
-body::before {
-  content: "★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ CATPLAY ★ ";
+.faixa-lateral {
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
   width: 40px;
   writing-mode: vertical-rl;
@@ -114,7 +112,7 @@ body::after {
   body {
     padding-left: 0;
   }
-  body::before {
+  .faixa-lateral {
     display: none;
   }
   body::after {
