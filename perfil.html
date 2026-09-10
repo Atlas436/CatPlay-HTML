@@ -38,12 +38,17 @@
       <label for="senha">Nova senha</label>
       <input type="password" id="senha" name="senha" placeholder="Deixe em branco para manter a atual" />
 
+      <label for="senha-atual">Senha atual (obrigatória para salvar)</label>
+      <input type="password" id="senha-atual" name="senha-atual" required />
+
       <button type="submit" class="botao-primario">Salvar alterações</button>
     </form>
 
     <div class="cartao-perfil" style="margin-top: 16px; border: 1px solid rgba(179, 66, 58, 0.3)">
       <strong style="color: #932f28">Zona de risco</strong>
       <p class="texto-ajuda">Excluir sua conta é permanente e não pode ser desfeito.</p>
+      <label for="senha-exclusao">Confirme sua senha</label>
+      <input type="password" id="senha-exclusao" name="senha-exclusao" />
       <button type="button" class="botao-perigo" id="botao-excluir">Excluir conta</button>
     </div>
   </main>
@@ -75,9 +80,10 @@
       var nome = document.getElementById("nome").value;
       var usuario = document.getElementById("usuario").value;
       var senha = document.getElementById("senha").value;
+      var senhaAtual = document.getElementById("senha-atual").value;
       var areaMensagem = document.getElementById("area-mensagem");
 
-      var resultado = await atualizarUsuario(sessao.usuario, {
+      var resultado = await atualizarUsuario(sessao.usuario, senhaAtual, {
         nome: nome,
         usuario: usuario,
         senha: senha,
@@ -94,12 +100,25 @@
     });
 
     document.getElementById("botao-excluir").addEventListener("click", async function () {
+      var senhaExclusao = document.getElementById("senha-exclusao").value;
+      var areaMensagem = document.getElementById("area-mensagem");
+
+      if (!senhaExclusao) {
+        areaMensagem.innerHTML = '<p class="erro">Digite sua senha pra confirmar a exclusão.</p>';
+        return;
+      }
+
       var confirmou = window.confirm(
         "Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita."
       );
       if (!confirmou) return;
 
-      await excluirUsuario(sessao.usuario);
+      var resultado = await excluirUsuario(sessao.usuario, senhaExclusao);
+      if (!resultado.ok) {
+        areaMensagem.innerHTML = '<p class="erro">' + (resultado.erro || "Senha incorreta.") + "</p>";
+        return;
+      }
+
       encerrarSessao();
       window.location.href = "index.html";
     });

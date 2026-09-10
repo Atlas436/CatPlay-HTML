@@ -30,10 +30,11 @@ async function autenticar(usuario, senha) {
   return { id: resposta.data.id, nome: resposta.data.nome, usuario: resposta.data.usuario };
 }
 
-// UPDATE — editar dados do usuário logado
-async function atualizarUsuario(usuarioOriginal, novosDados) {
+// UPDATE — editar dados do usuário logado (exige a senha atual)
+async function atualizarUsuario(usuarioOriginal, senhaAtual, novosDados) {
   var resposta = await supabaseClient.rpc("atualizar_usuario", {
     p_usuario_atual: usuarioOriginal.trim(),
+    p_senha_atual: senhaAtual,
     p_novo_nome: novosDados.nome.trim(),
     p_novo_usuario: novosDados.usuario.trim(),
     p_nova_senha: novosDados.senha || null,
@@ -47,9 +48,15 @@ async function atualizarUsuario(usuarioOriginal, novosDados) {
   };
 }
 
-// DELETE — excluir conta
-async function excluirUsuario(usuario) {
-  await supabaseClient.rpc("excluir_usuario", { p_usuario: usuario.trim() });
+// DELETE — excluir conta (exige a senha)
+async function excluirUsuario(usuario, senha) {
+  var resposta = await supabaseClient.rpc("excluir_usuario", {
+    p_usuario: usuario.trim(),
+    p_senha: senha,
+  });
+
+  if (resposta.error) return { ok: false, erro: "Erro ao excluir. Tente novamente." };
+  return resposta.data;
 }
 
 // ===== Sessão do usuário logado (sessionStorage) =====

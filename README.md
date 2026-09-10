@@ -6,18 +6,18 @@ Esta é a versão em **HTML + CSS + JavaScript puro**, sem framework e sem etapa
 
 ## Login e CRUD de usuários
 
-Diferente da versão React, esta versão tem **login com usuário e senha** e um **CRUD completo de usuários**, guardado no `localStorage` do navegador (funciona como um "banco de dados" local, já que não há servidor/back-end):
+Esta versão tem **login com usuário e senha** e um **CRUD completo de usuários**, guardado num banco de dados real (Postgres, via Supabase) — não mais no `localStorage`:
 
 | Operação | Onde acontece | Arquivo |
 | --- | --- | --- |
 | **C**reate | Tela "Criar conta" | `cadastro.html` |
 | **R**ead | Tela de login (valida usuário/senha) | `index.html` |
-| **U**pdate | Tela "Meu perfil" → Salvar alterações | `perfil.html` |
-| **D**elete | Tela "Meu perfil" → Excluir conta | `perfil.html` |
+| **U**pdate | Tela "Meu perfil" → Salvar alterações (exige a senha atual) | `perfil.html` |
+| **D**elete | Tela "Meu perfil" → Excluir conta (exige a senha) | `perfil.html` |
 
-Toda a lógica de CRUD fica centralizada em `js/auth.js`.
+Toda a lógica de CRUD fica centralizada em `js/auth.js`, chamando funções do banco (`cadastrar_usuario`, `autenticar_usuario`, `atualizar_usuario`, `excluir_usuario`) que já cuidam do hash de senha (bcrypt, via `pgcrypto`) e exigem a senha atual antes de editar ou excluir a conta.
 
-> ⚠️ **Aviso didático:** a senha é guardada em texto puro no `localStorage` só porque isto é um protótipo escolar sem back-end de verdade. Num sistema em produção, senha nunca deve ser guardada assim (o certo seria hash + salt num banco de dados real, do lado do servidor).
+> ⚠️ **Limitação conhecida:** a tabela `biblioteca_pessoal` (o que cada usuário marcou como "quero ver"/"em andamento"/"concluído") está com uma regra de segurança (RLS) aberta — qualquer pessoa com a chave pública do projeto consegue ler ou editar os registros de qualquer usuário, não só os próprios. Isso existe porque o projeto não usa o sistema de autenticação completo do Supabase (só uma tabela `usuarios` própria com funções customizadas), então não há como o banco saber sozinho "quem está pedindo isso" pra restringir por usuário. Resolver isso direito exigiria migrar pro Supabase Auth — fora do escopo deste protótipo, mas registrado aqui de propósito (mesma lógica do aviso antigo sobre senha em texto puro: é melhor documentar uma limitação conhecida do que escondê-la).
 
 ## Fluxo da aplicação
 

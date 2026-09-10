@@ -635,6 +635,10 @@ button:disabled {
   z-index: 40;
 }
 
+#catbot-painel[hidden] {
+  display: none;
+}
+
 #catbot-cabecalho {
   display: flex;
   justify-content: space-between;
