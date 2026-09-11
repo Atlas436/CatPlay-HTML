@@ -4,6 +4,7 @@ create or replace function autenticar_com_token(p_usuario text, p_senha text)
 returns jsonb
 language plpgsql
 security definer
+set search_path = public, extensions
 as $$
 declare
   registro usuarios%rowtype;
@@ -32,6 +33,7 @@ create or replace function obter_biblioteca(p_usuario_id bigint, p_token text)
 returns jsonb
 language plpgsql
 security definer
+set search_path = public, extensions
 as $$
 declare
   resultado jsonb;
@@ -65,6 +67,7 @@ create or replace function adicionar_biblioteca(p_usuario_id bigint, p_token tex
 returns boolean
 language plpgsql
 security definer
+set search_path = public, extensions
 as $$
 begin
   if not exists (select 1 from usuarios u where u.id = p_usuario_id and u.token = p_token) then
@@ -84,6 +87,7 @@ create or replace function atualizar_status_biblioteca(p_usuario_id bigint, p_to
 returns boolean
 language plpgsql
 security definer
+set search_path = public, extensions
 as $$
 begin
   if not exists (select 1 from usuarios u where u.id = p_usuario_id and u.token = p_token) then
@@ -102,6 +106,7 @@ create or replace function remover_biblioteca(p_usuario_id bigint, p_token text,
 returns boolean
 language plpgsql
 security definer
+set search_path = public, extensions
 as $$
 begin
   if not exists (select 1 from usuarios u where u.id = p_usuario_id and u.token = p_token) then
