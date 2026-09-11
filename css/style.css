@@ -66,29 +66,39 @@ body {
   left: 0;
   width: 40px;
   height: 0;
+  transform: skewY(-3deg);
+  background: var(--vermelho);
+  border-left: 3px dotted var(--branco);
+  border-right: 3px dotted var(--branco);
+  overflow: hidden;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Trilho com 2 cópias idênticas do texto empilhadas: anima só até a
+   metade (uma cópia inteira) pra fechar o loop sem vão nem salto. */
+.faixa-lateral-trilho {
+  animation: marquee-vertical 10s linear infinite;
+}
+
+.faixa-lateral-copia {
+  height: 0;
   writing-mode: vertical-rl;
   text-align: center;
-  transform: skewY(-3deg);
   font-weight: 900;
   font-size: 1rem;
   letter-spacing: 0.18em;
   color: var(--branco);
-  background: var(--vermelho);
-  border-left: 3px dotted var(--branco);
-  border-right: 3px dotted var(--branco);
   white-space: nowrap;
   overflow: hidden;
-  z-index: 20;
-  pointer-events: none;
-  animation: marquee-vertical 8s linear infinite;
 }
 
 @keyframes marquee-vertical {
   from {
-    transform: skewY(-3deg) translateY(0);
+    transform: translateY(0);
   }
   to {
-    transform: skewY(-3deg) translateY(-320px);
+    transform: translateY(-50%);
   }
 }
 
