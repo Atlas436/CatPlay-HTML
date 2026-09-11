@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
   widget.innerHTML =
     '<button id="catbot-botao" aria-label="Abrir chat do CatPlay">🐾</button>' +
     '<div id="catbot-painel" hidden>' +
-    '<div id="catbot-cabecalho"><strong>CatBot</strong>' +
+    '<div id="catbot-cabecalho"><strong>Gatbot</strong>' +
     '<button type="button" id="catbot-fechar" class="link">Fechar</button></div>' +
     '<div id="catbot-mensagens"></div>' +
     '<form id="catbot-form">' +

@@ -27,9 +27,9 @@ O catálogo de itens (filmes/séries, livros e jogos) vive numa única tabela (`
 
 Em cada card de resultado, o botão **"Ver parecidos"** busca itens de um **tipo de mídia diferente** do original (ex: gostou de um filme → sugere livros e jogos parecidos), pontuando por gênero, humores e tags em comum (`buscarRecomendacoesCruzadas` em `js/biblioteca.js`).
 
-## Chatbot de IA
+## Chatbot de IA — Gatbot
 
-Um chatbot flutuante (ícone 🐾 no canto da tela, em toda página logada) reconhece humor/gênero por palavras-chave e responde usando o catálogo real do banco — nada de resposta solta. Também entende pedidos tipo "me indica algo novo", cruzando o catálogo com a biblioteca pessoal do usuário pra sugerir só o que ele ainda não tem. Lógica baseada em regras simples (dicionário de sinônimos + busca no banco), sem modelo de IA pesado — ver `js/chatbot.js`.
+O **Gatbot**, chatbot flutuante (ícone 🐾 no canto da tela, em toda página logada), reconhece humor/gênero por palavras-chave e responde usando o catálogo real do banco — nada de resposta solta. Também entende pedidos tipo "me indica algo novo", cruzando o catálogo com a biblioteca pessoal do usuário pra sugerir só o que ele ainda não tem. Lógica baseada em regras simples (dicionário de sinônimos + busca no banco), sem modelo de IA pesado — ver `js/chatbot.js`.
 
 ## Fluxo da aplicação
 
