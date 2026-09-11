@@ -62,7 +62,6 @@
         return;
       }
 
-      // cadastro deu certo: já loga o usuário automaticamente
       var usuarioCriado = await autenticar(usuario, senha);
       definirSessao(usuarioCriado);
       window.location.href = "mode.html";

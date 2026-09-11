@@ -1,11 +1,5 @@
-// ===== Autenticação de usuários (Supabase / Postgres) =====
-// Antes o "banco" era o localStorage; agora os dados ficam de verdade
-// num banco na nuvem (Supabase), com senha protegida por hash (bcrypt),
-// aplicado direto no banco pelas funções cadastrar_usuario/atualizar_usuario.
-
 var CHAVE_SESSAO = "catplay_sessao";
 
-// CREATE — cadastrar novo usuário
 async function cadastrarUsuario(nome, usuario, senha) {
   var resposta = await supabaseClient.rpc("cadastrar_usuario", {
     p_nome: nome.trim(),
@@ -19,7 +13,6 @@ async function cadastrarUsuario(nome, usuario, senha) {
   return resposta.data;
 }
 
-// READ — validar login
 async function autenticar(usuario, senha) {
   var resposta = await supabaseClient.rpc("autenticar_usuario", {
     p_usuario: usuario.trim(),
@@ -30,7 +23,6 @@ async function autenticar(usuario, senha) {
   return { id: resposta.data.id, nome: resposta.data.nome, usuario: resposta.data.usuario };
 }
 
-// UPDATE — editar dados do usuário logado (exige a senha atual)
 async function atualizarUsuario(usuarioOriginal, senhaAtual, novosDados) {
   var resposta = await supabaseClient.rpc("atualizar_usuario", {
     p_usuario_atual: usuarioOriginal.trim(),
@@ -48,7 +40,6 @@ async function atualizarUsuario(usuarioOriginal, senhaAtual, novosDados) {
   };
 }
 
-// DELETE — excluir conta (exige a senha)
 async function excluirUsuario(usuario, senha) {
   var resposta = await supabaseClient.rpc("excluir_usuario", {
     p_usuario: usuario.trim(),
@@ -59,9 +50,6 @@ async function excluirUsuario(usuario, senha) {
   return resposta.data;
 }
 
-// ===== Sessão do usuário logado (sessionStorage) =====
-// A sessão (quem está logado nesta aba) continua local — é só uma
-// "lembrança" do navegador. Os dados do usuário em si vêm do banco.
 function definirSessao(usuario) {
   sessionStorage.setItem(CHAVE_SESSAO, JSON.stringify(usuario));
 }
@@ -75,7 +63,6 @@ function encerrarSessao() {
   sessionStorage.removeItem(CHAVE_SESSAO);
 }
 
-// Protege páginas que exigem login; chame no topo do <script> da página
 function exigirLogin() {
   var sessao = obterSessao();
   if (!sessao) {

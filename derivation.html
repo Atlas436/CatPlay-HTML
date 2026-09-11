@@ -47,7 +47,7 @@
     });
 
     var parametros = new URLSearchParams(window.location.search);
-    var tipo = parametros.get("tipo"); // "humor" ou "genero"
+    var tipo = parametros.get("tipo");
 
     var opcoes = tipo === "humor" ? HUMORES : GENEROS;
     document.getElementById("pergunta").textContent =

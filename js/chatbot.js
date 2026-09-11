@@ -1,7 +1,3 @@
-// Chatbot simples baseado em regras — usa os dados reais do catálogo
-// (não é um modelo de IA pesado, é reconhecimento de palavras-chave +
-// as mesmas buscas que a tela de resultados já usa).
-
 var SINONIMOS_HUMOR = {
   relaxar: ["relaxar", "tranquilo", "calma", "de boa", "suave", "relax"],
   adrenalina: ["adrenalina", "acao", "emocao", "emocionante", "agito", "susto", "medo"],
@@ -105,7 +101,6 @@ async function responderChatbot(mensagem, sessaoAtual) {
   );
 }
 
-// ===== Interface flutuante (injetada em toda página que carrega este script) =====
 document.addEventListener("DOMContentLoaded", function () {
   var widget = document.createElement("div");
   widget.innerHTML =

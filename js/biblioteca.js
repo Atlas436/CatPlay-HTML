@@ -1,5 +1,3 @@
-// Biblioteca unificada de entretenimento (Supabase)
-// Busca itens do catálogo (filmes/livros/jogos) filtrados por humor ou gênero.
 async function buscarItens(tipo, valor) {
   try {
     var consulta = supabaseClient.from("itens").select("*");
@@ -22,9 +20,6 @@ async function buscarItens(tipo, valor) {
   }
 }
 
-// ===== Recomendação cruzada entre mídias =====
-// "Gostou desse filme? aqui livros/jogos parecidos" — cruza gênero,
-// humores e tags em comum, só com itens de um TIPO diferente do original.
 async function buscarRecomendacoesCruzadas(item) {
   try {
     var resposta = await supabaseClient.from("itens").select("*").neq("id", item.id);
@@ -64,9 +59,6 @@ async function buscarRecomendacoesCruzadas(item) {
   }
 }
 
-// ===== Biblioteca pessoal (o que o usuário já assistiu/leu/jogou) =====
-
-// Adiciona (ou atualiza, se já existir) um item na biblioteca pessoal
 async function adicionarNaBiblioteca(usuarioId, itemId, status) {
   try {
     var resposta = await supabaseClient.from("biblioteca_pessoal").upsert(
@@ -85,7 +77,6 @@ async function adicionarNaBiblioteca(usuarioId, itemId, status) {
   }
 }
 
-// Busca a biblioteca pessoal do usuário, já com os dados do item juntos
 async function obterMinhaBiblioteca(usuarioId) {
   try {
     var resposta = await supabaseClient
@@ -105,7 +96,6 @@ async function obterMinhaBiblioteca(usuarioId) {
   }
 }
 
-// Atualiza o status de um item já salvo na biblioteca pessoal
 async function atualizarStatusBiblioteca(registroId, status) {
   try {
     var resposta = await supabaseClient
@@ -119,7 +109,6 @@ async function atualizarStatusBiblioteca(registroId, status) {
   }
 }
 
-// Remove um item da biblioteca pessoal
 async function removerDaBiblioteca(registroId) {
   try {
     var resposta = await supabaseClient.from("biblioteca_pessoal").delete().eq("id", registroId);

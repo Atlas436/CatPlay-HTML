@@ -1,7 +1,3 @@
-// Configuração de interface (rótulos e emojis).
-// Os itens da biblioteca (filmes/livros/jogos) agora vêm do Supabase,
-// não ficam mais fixos aqui — veja js/biblioteca.js.
-
 var HUMORES = [
   { chave: "relaxar", rotulo: "Para relaxar", emoji: "🌿" },
   { chave: "adrenalina", rotulo: "Em busca de adrenalina", emoji: "⚡" },

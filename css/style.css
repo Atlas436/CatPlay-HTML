@@ -1,4 +1,3 @@
-/* ===== Paleta brutalista (fundo escuro + vermelho dominante) ===== */
 :root {
   --negro: #111111;
   --branco: #f4f1ea;
@@ -10,9 +9,6 @@
   --sombra-dura-pequena: 3px 3px 0 var(--vermelho);
 }
 
-/* ===== Transição entre páginas ("página nova sobe por cima da antiga") =====
-   View Transitions API — nativa do navegador, sem JS. Em navegadores sem
-   suporte, a navegação simplesmente acontece sem animação (nada quebra). */
 @view-transition {
   navigation: auto;
 }
@@ -56,10 +52,6 @@ body {
   position: relative;
 }
 
-/* Faixa vertical decorativa que acompanha a altura real da página (não só
-   a tela) — texto repetindo e levemente distorcido, referência brutalismo
-   de cartaz/rave. position:absolute + top/bottom:0 faz ela esticar até o
-   fim do conteúdo, diferente de position:fixed (que só cobre a tela). */
 .faixa-lateral {
   position: absolute;
   top: 0;
@@ -75,8 +67,6 @@ body {
   pointer-events: none;
 }
 
-/* Trilho com 2 cópias idênticas do texto empilhadas: anima só até a
-   metade (uma cópia inteira) pra fechar o loop sem vão nem salto. */
 .faixa-lateral-trilho {
   animation: marquee-vertical 10s linear infinite;
 }
@@ -102,7 +92,6 @@ body {
   }
 }
 
-/* Selo fixo no rodapé, tipo carimbo de produto */
 body::after {
   content: "CATPLAY+ · PROTÓTIPO";
   position: fixed;
@@ -173,7 +162,6 @@ body::after {
   line-height: 1.05;
 }
 
-/* Dentro de cartões brancos, o título volta a ser escuro */
 .caixa .titulo,
 .cartao-perfil .titulo {
   color: var(--negro);
@@ -194,7 +182,6 @@ h1.titulo {
   text-align: center;
 }
 
-/* Cartão / caixa */
 .caixa {
   width: 100%;
   max-width: 380px;
@@ -322,7 +309,6 @@ button:disabled {
   font-weight: 700;
 }
 
-/* Cabeçalho com barra de navegação */
 .barra-topo {
   width: 100%;
   display: flex;
@@ -391,7 +377,6 @@ button:disabled {
   padding: 40px 24px;
 }
 
-/* Grade de opções (modo / humor / gênero) */
 .grade-opcoes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -453,7 +438,6 @@ button:disabled {
   opacity: 0.85;
 }
 
-/* Seções de resultados */
 .secao-midia h2 {
   font-weight: 900;
   text-transform: uppercase;
@@ -613,7 +597,6 @@ button:disabled {
   padding: 2px 8px;
 }
 
-/* ===== Chatbot flutuante ===== */
 #catbot-botao {
   position: fixed;
   bottom: 20px;
@@ -721,12 +704,6 @@ button:disabled {
   display: flex;
   flex-direction: column;
   gap: 14px;
-}
-
-.linha-botoes {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
 }
 
 .texto-ajuda {
