@@ -59,31 +59,27 @@ async function buscarRecomendacoesCruzadas(item) {
   }
 }
 
-async function adicionarNaBiblioteca(usuarioId, itemId, status) {
+async function adicionarNaBiblioteca(usuarioId, token, itemId, status) {
   try {
-    var resposta = await supabaseClient.from("biblioteca_pessoal").upsert(
-      {
-        usuario_id: usuarioId,
-        item_id: itemId,
-        status: status,
-        atualizado_em: new Date().toISOString(),
-      },
-      { onConflict: "usuario_id,item_id" }
-    );
-    return !resposta.error;
+    var resposta = await supabaseClient.rpc("adicionar_biblioteca", {
+      p_usuario_id: usuarioId,
+      p_token: token,
+      p_item_id: itemId,
+      p_status: status,
+    });
+    return !resposta.error && resposta.data === true;
   } catch (excecao) {
     console.error("Falha de conexão ao adicionar na biblioteca:", excecao);
     return false;
   }
 }
 
-async function obterMinhaBiblioteca(usuarioId) {
+async function obterMinhaBiblioteca(usuarioId, token) {
   try {
-    var resposta = await supabaseClient
-      .from("biblioteca_pessoal")
-      .select("id, status, progresso, itens(*)")
-      .eq("usuario_id", usuarioId)
-      .order("atualizado_em", { ascending: false });
+    var resposta = await supabaseClient.rpc("obter_biblioteca", {
+      p_usuario_id: usuarioId,
+      p_token: token,
+    });
 
     if (resposta.error) {
       console.error("Erro ao buscar biblioteca pessoal:", resposta.error);
@@ -96,23 +92,29 @@ async function obterMinhaBiblioteca(usuarioId) {
   }
 }
 
-async function atualizarStatusBiblioteca(registroId, status) {
+async function atualizarStatusBiblioteca(usuarioId, token, registroId, status) {
   try {
-    var resposta = await supabaseClient
-      .from("biblioteca_pessoal")
-      .update({ status: status, atualizado_em: new Date().toISOString() })
-      .eq("id", registroId);
-    return !resposta.error;
+    var resposta = await supabaseClient.rpc("atualizar_status_biblioteca", {
+      p_usuario_id: usuarioId,
+      p_token: token,
+      p_registro_id: registroId,
+      p_status: status,
+    });
+    return !resposta.error && resposta.data === true;
   } catch (excecao) {
     console.error("Falha de conexão ao atualizar status:", excecao);
     return false;
   }
 }
 
-async function removerDaBiblioteca(registroId) {
+async function removerDaBiblioteca(usuarioId, token, registroId) {
   try {
-    var resposta = await supabaseClient.from("biblioteca_pessoal").delete().eq("id", registroId);
-    return !resposta.error;
+    var resposta = await supabaseClient.rpc("remover_biblioteca", {
+      p_usuario_id: usuarioId,
+      p_token: token,
+      p_registro_id: registroId,
+    });
+    return !resposta.error && resposta.data === true;
   } catch (excecao) {
     console.error("Falha de conexão ao remover da biblioteca:", excecao);
     return false;

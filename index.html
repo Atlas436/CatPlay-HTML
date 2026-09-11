@@ -43,19 +43,47 @@
       window.location.href = "mode.html";
     }
 
+    var CHAVE_TENTATIVAS = "catplay_tentativas_login";
+    var MAX_TENTATIVAS = 5;
+    var BLOQUEIO_MS = 30000;
+
+    function obterTentativas() {
+      var dados = localStorage.getItem(CHAVE_TENTATIVAS);
+      return dados ? JSON.parse(dados) : { quantidade: 0, bloqueadoAte: 0 };
+    }
+
+    function salvarTentativas(tentativas) {
+      localStorage.setItem(CHAVE_TENTATIVAS, JSON.stringify(tentativas));
+    }
+
     document.getElementById("form-login").addEventListener("submit", async function (evento) {
       evento.preventDefault();
+      var areaErro = document.getElementById("area-erro");
+      var tentativas = obterTentativas();
+
+      if (Date.now() < tentativas.bloqueadoAte) {
+        var segundosRestantes = Math.ceil((tentativas.bloqueadoAte - Date.now()) / 1000);
+        areaErro.innerHTML =
+          '<p class="erro">Muitas tentativas erradas. Tente de novo em ' + segundosRestantes + "s.</p>";
+        return;
+      }
+
       var usuario = document.getElementById("usuario").value;
       var senha = document.getElementById("senha").value;
 
       var encontrado = await autenticar(usuario, senha);
-      var areaErro = document.getElementById("area-erro");
 
       if (!encontrado) {
+        tentativas.quantidade += 1;
+        if (tentativas.quantidade >= MAX_TENTATIVAS) {
+          tentativas = { quantidade: 0, bloqueadoAte: Date.now() + BLOQUEIO_MS };
+        }
+        salvarTentativas(tentativas);
         areaErro.innerHTML = '<p class="erro">Usuário ou senha inválidos.</p>';
         return;
       }
 
+      salvarTentativas({ quantidade: 0, bloqueadoAte: 0 });
       definirSessao(encontrado);
       window.location.href = "mode.html";
     });

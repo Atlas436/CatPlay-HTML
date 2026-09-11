@@ -46,7 +46,7 @@ async function sugerirNaoVistos(sessaoAtual) {
     return "Faz login primeiro pra eu poder olhar sua biblioteca! 🐾";
   }
 
-  var minhaBiblioteca = await obterMinhaBiblioteca(sessaoAtual.id);
+  var minhaBiblioteca = await obterMinhaBiblioteca(sessaoAtual.id, sessaoAtual.token);
   var idsNaBiblioteca = minhaBiblioteca
     .map(function (registro) {
       return registro.itens ? registro.itens.id : null;

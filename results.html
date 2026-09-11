@@ -80,6 +80,131 @@
           '<p class="centralizado">Ainda não temos recomendações para essa combinação. Tente outra opção!</p>';
       }
 
+      function criarCard(item) {
+        var card = document.createElement("article");
+        card.className = "midia-card";
+        card.setAttribute("data-codigo", "CP-" + String(item.id).padStart(4, "0"));
+
+        var cabecalho = document.createElement("div");
+        cabecalho.className = "cabecalho-card";
+
+        var h3 = document.createElement("h3");
+        h3.textContent = item.titulo;
+        cabecalho.appendChild(h3);
+
+        var tipoEtiqueta = document.createElement("span");
+        tipoEtiqueta.className = "tipo-etiqueta";
+        tipoEtiqueta.textContent = item.tipo;
+        cabecalho.appendChild(tipoEtiqueta);
+
+        card.appendChild(cabecalho);
+
+        var sinopse = document.createElement("p");
+        sinopse.textContent = item.sinopse;
+        card.appendChild(sinopse);
+
+        var tagsDiv = document.createElement("div");
+        tagsDiv.className = "tags";
+        item.tags.forEach(function (tag) {
+          var tagSpan = document.createElement("span");
+          tagSpan.className = "tag";
+          tagSpan.textContent = "#" + tag;
+          tagsDiv.appendChild(tagSpan);
+        });
+        card.appendChild(tagsDiv);
+
+        var controles = document.createElement("div");
+        controles.className = "controles-biblioteca";
+
+        var select = document.createElement("select");
+        select.className = "select-status";
+        STATUS_BIBLIOTECA.forEach(function (s) {
+          var opcao = document.createElement("option");
+          opcao.value = s.chave;
+          opcao.textContent = s.rotulo;
+          select.appendChild(opcao);
+        });
+        controles.appendChild(select);
+
+        var botaoAdicionar = document.createElement("button");
+        botaoAdicionar.type = "button";
+        botaoAdicionar.className = "botao botao-secundario botao-adicionar";
+        botaoAdicionar.textContent = "+ Minha biblioteca";
+        controles.appendChild(botaoAdicionar);
+
+        var botaoParecidos = document.createElement("button");
+        botaoParecidos.type = "button";
+        botaoParecidos.className = "botao botao-secundario botao-parecidos";
+        botaoParecidos.textContent = "Ver parecidos";
+        controles.appendChild(botaoParecidos);
+
+        card.appendChild(controles);
+
+        var mensagem = document.createElement("p");
+        mensagem.className = "mensagem-biblioteca";
+        card.appendChild(mensagem);
+
+        var areaParecidos = document.createElement("div");
+        areaParecidos.className = "recomendacoes-cruzadas";
+        card.appendChild(areaParecidos);
+
+        botaoAdicionar.addEventListener("click", async function () {
+          botaoAdicionar.disabled = true;
+          var ok = await adicionarNaBiblioteca(sessao.id, sessao.token, item.id, select.value);
+          mensagem.textContent = ok
+            ? "Adicionado à sua biblioteca!"
+            : "Não deu pra adicionar, tenta de novo.";
+          mensagem.className = "mensagem-biblioteca " + (ok ? "sucesso" : "erro");
+          botaoAdicionar.disabled = false;
+        });
+
+        botaoParecidos.addEventListener("click", async function () {
+          if (areaParecidos.childElementCount > 0) {
+            areaParecidos.innerHTML = "";
+            botaoParecidos.textContent = "Ver parecidos";
+            return;
+          }
+
+          botaoParecidos.disabled = true;
+          botaoParecidos.textContent = "Buscando...";
+          var parecidos = await buscarRecomendacoesCruzadas(item);
+          botaoParecidos.disabled = false;
+          botaoParecidos.textContent = "Esconder parecidos";
+
+          if (parecidos.length === 0) {
+            var aviso = document.createElement("p");
+            aviso.className = "texto-ajuda";
+            aviso.textContent = "Ainda não achamos nada parecido de outro tipo de mídia.";
+            areaParecidos.appendChild(aviso);
+            return;
+          }
+
+          var legenda = document.createElement("p");
+          legenda.className = "texto-ajuda";
+          legenda.style.marginBottom = "6px";
+          legenda.textContent = "Porque você curtiu isso:";
+          areaParecidos.appendChild(legenda);
+
+          parecidos.forEach(function (p) {
+            var linha = document.createElement("div");
+            linha.className = "item-parecido";
+
+            var etiqueta = document.createElement("span");
+            etiqueta.className = "tipo-etiqueta";
+            etiqueta.textContent = p.tipo;
+            linha.appendChild(etiqueta);
+
+            var forte = document.createElement("strong");
+            forte.textContent = p.titulo;
+            linha.appendChild(forte);
+
+            areaParecidos.appendChild(linha);
+          });
+        });
+
+        return card;
+      }
+
       TIPOS_MIDIA.forEach(function (tipoMidia) {
         var itensDoTipo = itensFiltrados.filter(function (item) {
           return item.tipo === tipoMidia;
@@ -97,84 +222,7 @@
         grade.className = "grade-cards";
 
         itensDoTipo.forEach(function (item) {
-          var card = document.createElement("article");
-          card.className = "midia-card";
-          card.setAttribute("data-codigo", "CP-" + String(item.id).padStart(4, "0"));
-
-          var tagsHtml = item.tags
-            .map(function (tag) {
-              return '<span class="tag">#' + tag + "</span>";
-            })
-            .join("");
-
-          var opcoesStatusHtml = STATUS_BIBLIOTECA.map(function (s) {
-            return '<option value="' + s.chave + '">' + s.rotulo + "</option>";
-          }).join("");
-
-          card.innerHTML =
-            '<div class="cabecalho-card">' +
-            "<h3>" + item.titulo + "</h3>" +
-            '<span class="tipo-etiqueta">' + item.tipo + "</span>" +
-            "</div>" +
-            "<p>" + item.sinopse + "</p>" +
-            '<div class="tags">' + tagsHtml + "</div>" +
-            '<div class="controles-biblioteca">' +
-            '<select class="select-status">' + opcoesStatusHtml + "</select>" +
-            '<button type="button" class="botao botao-secundario botao-adicionar">+ Minha biblioteca</button>' +
-            '<button type="button" class="botao botao-secundario botao-parecidos">Ver parecidos</button>' +
-            "</div>" +
-            '<p class="mensagem-biblioteca"></p>' +
-            '<div class="recomendacoes-cruzadas"></div>';
-
-          var botaoAdicionar = card.querySelector(".botao-adicionar");
-          botaoAdicionar.addEventListener("click", async function () {
-            var statusEscolhido = card.querySelector(".select-status").value;
-            var mensagem = card.querySelector(".mensagem-biblioteca");
-            botaoAdicionar.disabled = true;
-            var ok = await adicionarNaBiblioteca(sessao.id, item.id, statusEscolhido);
-            mensagem.textContent = ok
-              ? "Adicionado à sua biblioteca!"
-              : "Não deu pra adicionar, tenta de novo.";
-            mensagem.className = "mensagem-biblioteca " + (ok ? "sucesso" : "erro");
-            botaoAdicionar.disabled = false;
-          });
-
-          var botaoParecidos = card.querySelector(".botao-parecidos");
-          var areaParecidos = card.querySelector(".recomendacoes-cruzadas");
-          botaoParecidos.addEventListener("click", async function () {
-            if (areaParecidos.childElementCount > 0) {
-              areaParecidos.innerHTML = "";
-              botaoParecidos.textContent = "Ver parecidos";
-              return;
-            }
-
-            botaoParecidos.disabled = true;
-            botaoParecidos.textContent = "Buscando...";
-            var parecidos = await buscarRecomendacoesCruzadas(item);
-            botaoParecidos.disabled = false;
-            botaoParecidos.textContent = "Esconder parecidos";
-
-            if (parecidos.length === 0) {
-              areaParecidos.innerHTML =
-                '<p class="texto-ajuda">Ainda não achamos nada parecido de outro tipo de mídia.</p>';
-              return;
-            }
-
-            areaParecidos.innerHTML =
-              '<p class="texto-ajuda" style="margin-bottom: 6px">Porque você curtiu isso:</p>' +
-              parecidos
-                .map(function (p) {
-                  return (
-                    '<div class="item-parecido">' +
-                    '<span class="tipo-etiqueta">' + p.tipo + "</span>" +
-                    "<strong>" + p.titulo + "</strong>" +
-                    "</div>"
-                  );
-                })
-                .join("");
-          });
-
-          grade.appendChild(card);
+          grade.appendChild(criarCard(item));
         });
 
         secao.appendChild(grade);

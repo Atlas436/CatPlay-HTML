@@ -15,9 +15,11 @@ Login com usuário e senha e um **CRUD completo de usuários**, guardado num ban
 | **U**pdate | Tela "Meu perfil" → Salvar alterações (exige a senha atual) | `perfil.html` |
 | **D**elete | Tela "Meu perfil" → Excluir conta (exige a senha) | `perfil.html` |
 
-Toda a lógica de CRUD fica centralizada em `js/auth.js`, chamando funções do banco (`cadastrar_usuario`, `autenticar_usuario`, `atualizar_usuario`, `excluir_usuario`) que já cuidam do hash de senha (bcrypt, via `pgcrypto`) e exigem a senha atual antes de editar ou excluir a conta.
+Toda a lógica de CRUD fica centralizada em `js/auth.js`, chamando funções do banco (`cadastrar_usuario`, `autenticar_com_token`, `atualizar_usuario`, `excluir_usuario`) que já cuidam do hash de senha (bcrypt, via `pgcrypto`) e exigem a senha atual antes de editar ou excluir a conta.
 
-> ⚠️ **Limitação conhecida:** a tabela `biblioteca_pessoal` (o que cada usuário marcou como "quero ver"/"em andamento"/"concluído") está com uma regra de segurança (RLS) aberta — qualquer pessoa com a chave pública do projeto consegue ler ou editar os registros de qualquer usuário, não só os próprios. Isso existe porque o projeto não usa o sistema de autenticação completo do Supabase (só uma tabela `usuarios` própria com funções customizadas), então não há como o banco saber sozinho "quem está pedindo isso" pra restringir por usuário. Resolver isso direito exigiria migrar pro Supabase Auth — fora do escopo deste protótipo, mas registrado aqui de propósito (mesma lógica do aviso antigo sobre senha em texto puro: é melhor documentar uma limitação conhecida do que escondê-la).
+O login também tem um limite simples de tentativas: depois de 5 senhas erradas seguidas, a tela bloqueia novos envios por 30 segundos (guardado no `localStorage` do navegador). É uma proteção só do lado do cliente — não impede alguém de chamar a API do Supabase direto — mas já corta tentativa de força bruta feita pela tela de login normal.
+
+> ⚠️ **Limitação conhecida:** como o projeto não usa o sistema de autenticação completo do Supabase (só uma tabela `usuarios` própria com funções customizadas), não existe uma sessão de verdade que o banco reconheça sozinho. Pra evitar que qualquer pessoa com a chave pública leia/edite a biblioteca pessoal de qualquer usuário, cada login agora gera um **token de sessão** (coluna `token` em `usuarios`, guardado junto com a sessão) e toda operação em `biblioteca_pessoal` passa por funções do banco (`obter_biblioteca`, `adicionar_biblioteca`, `atualizar_status_biblioteca`, `remover_biblioteca`) que conferem esse token antes de fazer qualquer coisa — a tabela em si não aceita mais leitura/escrita direta (RLS sem política aberta). Não é o mesmo nível de segurança do Supabase Auth de verdade (o token não expira sozinho, por exemplo), mas fecha a brecha principal dentro do escopo deste protótipo. O SQL dessa migração está em `supabase/seguranca_biblioteca.sql`.
 
 ## Biblioteca unificada e biblioteca pessoal
 
@@ -58,7 +60,7 @@ A navegação entre telas é feita por **links normais entre páginas HTML**, pa
 
 Três tabelas relacionais no Supabase/Postgres:
 
-- **`usuarios`** — id (PK), nome, usuario (único), senha_hash.
+- **`usuarios`** — id (PK), nome, usuario (único), senha_hash, token (sessão atual).
 - **`itens`** — id (PK), titulo, tipo, genero, sinopse, humores (lista), tags (lista) — a biblioteca unificada.
 - **`biblioteca_pessoal`** — id (PK), usuario_id (FK → usuarios), item_id (FK → itens), status, progresso — liga usuário e item.
 
@@ -88,7 +90,7 @@ python3 -m http.server 8000
 # depois acesse http://localhost:8000
 ```
 
-As credenciais do Supabase (URL + chave pública) já estão em `js/supabaseClient.js` — não precisa configurar nada extra pra o site funcionar.
+As credenciais do Supabase (URL + chave pública) já estão em `js/supabaseClient.js` — não precisa configurar nada extra pra o site funcionar. O SQL em `supabase/seguranca_biblioteca.sql` já foi rodado no projeto Supabase usado pelo time; se for recriar o banco do zero, rode os SQLs de criação das tabelas/funções e depois esse arquivo.
 
 ## Como publicar no GitHub Pages
 
@@ -113,6 +115,8 @@ O arquivo `mvp/index.html` é um protótipo autocontido (feito por uma colaborad
 ├── perfil.html           # CRUD: editar (Update) e excluir (Delete) conta
 ├── mvp/
 │   └── index.html        # Protótipo autocontido, dados fake, sem Supabase
+├── supabase/
+│   └── seguranca_biblioteca.sql # migração: token de sessão + funções da biblioteca pessoal
 ├── css/
 │   └── style.css         # estilos, paleta brutalista, transições
 ├── js/

@@ -54,8 +54,69 @@
       return item ? item.rotulo : chave;
     }
 
+    function criarCard(registro) {
+      var item = registro.itens;
+
+      var card = document.createElement("article");
+      card.className = "midia-card";
+      card.setAttribute("data-codigo", "CP-" + String(item.id).padStart(4, "0"));
+
+      var cabecalho = document.createElement("div");
+      cabecalho.className = "cabecalho-card";
+
+      var h3 = document.createElement("h3");
+      h3.textContent = item.titulo;
+      cabecalho.appendChild(h3);
+
+      var tipoEtiqueta = document.createElement("span");
+      tipoEtiqueta.className = "tipo-etiqueta";
+      tipoEtiqueta.textContent = item.tipo;
+      cabecalho.appendChild(tipoEtiqueta);
+
+      card.appendChild(cabecalho);
+
+      var sinopse = document.createElement("p");
+      sinopse.textContent = item.sinopse;
+      card.appendChild(sinopse);
+
+      var controles = document.createElement("div");
+      controles.className = "controles-biblioteca";
+
+      var select = document.createElement("select");
+      select.className = "select-status";
+      STATUS_BIBLIOTECA.forEach(function (s) {
+        var opcao = document.createElement("option");
+        opcao.value = s.chave;
+        opcao.textContent = s.rotulo;
+        if (s.chave === registro.status) opcao.selected = true;
+        select.appendChild(opcao);
+      });
+      controles.appendChild(select);
+
+      var botaoRemover = document.createElement("button");
+      botaoRemover.type = "button";
+      botaoRemover.className = "botao botao-perigo botao-remover";
+      botaoRemover.textContent = "Remover";
+      controles.appendChild(botaoRemover);
+
+      card.appendChild(controles);
+
+      select.addEventListener("change", async function (evento) {
+        await atualizarStatusBiblioteca(sessao.id, sessao.token, registro.id, evento.target.value);
+      });
+
+      botaoRemover.addEventListener("click", async function () {
+        var confirmou = window.confirm('Remover "' + item.titulo + '" da sua biblioteca?');
+        if (!confirmou) return;
+        await removerDaBiblioteca(sessao.id, sessao.token, registro.id);
+        card.remove();
+      });
+
+      return card;
+    }
+
     async function montarBiblioteca() {
-      var registros = await obterMinhaBiblioteca(sessao.id);
+      var registros = await obterMinhaBiblioteca(sessao.id, sessao.token);
 
       if (registros.length === 0) {
         area.innerHTML =
@@ -67,41 +128,8 @@
       grade.className = "grade-cards";
 
       registros.forEach(function (registro) {
-        var item = registro.itens;
-        if (!item) return;
-
-        var card = document.createElement("article");
-        card.className = "midia-card";
-        card.setAttribute("data-codigo", "CP-" + String(item.id).padStart(4, "0"));
-
-        var opcoesStatusHtml = STATUS_BIBLIOTECA.map(function (s) {
-          var selecionado = s.chave === registro.status ? " selected" : "";
-          return '<option value="' + s.chave + '"' + selecionado + ">" + s.rotulo + "</option>";
-        }).join("");
-
-        card.innerHTML =
-          '<div class="cabecalho-card">' +
-          "<h3>" + item.titulo + "</h3>" +
-          '<span class="tipo-etiqueta">' + item.tipo + "</span>" +
-          "</div>" +
-          "<p>" + item.sinopse + "</p>" +
-          '<div class="controles-biblioteca">' +
-          '<select class="select-status">' + opcoesStatusHtml + "</select>" +
-          '<button type="button" class="botao botao-perigo botao-remover">Remover</button>' +
-          "</div>";
-
-        card.querySelector(".select-status").addEventListener("change", async function (evento) {
-          await atualizarStatusBiblioteca(registro.id, evento.target.value);
-        });
-
-        card.querySelector(".botao-remover").addEventListener("click", async function () {
-          var confirmou = window.confirm("Remover \"" + item.titulo + "\" da sua biblioteca?");
-          if (!confirmou) return;
-          await removerDaBiblioteca(registro.id);
-          card.remove();
-        });
-
-        grade.appendChild(card);
+        if (!registro.itens) return;
+        grade.appendChild(criarCard(registro));
       });
 
       area.innerHTML = "";

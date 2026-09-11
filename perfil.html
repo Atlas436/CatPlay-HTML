@@ -95,8 +95,9 @@
         return;
       }
 
-      definirSessao(resultado.usuario);
-      sessao = resultado.usuario;
+      var novaSessao = Object.assign({}, sessao, resultado.usuario);
+      definirSessao(novaSessao);
+      sessao = novaSessao;
       areaMensagem.innerHTML = '<p class="sucesso">Dados atualizados com sucesso!</p>';
     });
 

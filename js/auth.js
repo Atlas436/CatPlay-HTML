@@ -14,13 +14,18 @@ async function cadastrarUsuario(nome, usuario, senha) {
 }
 
 async function autenticar(usuario, senha) {
-  var resposta = await supabaseClient.rpc("autenticar_usuario", {
+  var resposta = await supabaseClient.rpc("autenticar_com_token", {
     p_usuario: usuario.trim(),
     p_senha: senha,
   });
 
   if (resposta.error || !resposta.data.ok) return null;
-  return { id: resposta.data.id, nome: resposta.data.nome, usuario: resposta.data.usuario };
+  return {
+    id: resposta.data.id,
+    nome: resposta.data.nome,
+    usuario: resposta.data.usuario,
+    token: resposta.data.token,
+  };
 }
 
 async function atualizarUsuario(usuarioOriginal, senhaAtual, novosDados) {
