@@ -101,15 +101,38 @@
 
       card.appendChild(controles);
 
+      var mensagem = document.createElement("p");
+      mensagem.className = "mensagem-biblioteca";
+      card.appendChild(mensagem);
+
       select.addEventListener("change", async function (evento) {
-        await atualizarStatusBiblioteca(sessao.id, sessao.token, registro.id, evento.target.value);
+        var novoStatus = evento.target.value;
+        var ok = await atualizarStatusBiblioteca(sessao.id, sessao.token, registro.id, novoStatus);
+
+        if (ok) {
+          registro.status = novoStatus;
+          mensagem.textContent = "Status atualizado!";
+          mensagem.className = "mensagem-biblioteca sucesso";
+          return;
+        }
+
+        evento.target.value = registro.status;
+        mensagem.textContent = "Não deu pra atualizar o status. Tente de novo.";
+        mensagem.className = "mensagem-biblioteca erro";
       });
 
       botaoRemover.addEventListener("click", async function () {
         var confirmou = window.confirm('Remover "' + item.titulo + '" da sua biblioteca?');
         if (!confirmou) return;
-        await removerDaBiblioteca(sessao.id, sessao.token, registro.id);
-        card.remove();
+
+        var ok = await removerDaBiblioteca(sessao.id, sessao.token, registro.id);
+        if (ok) {
+          card.remove();
+          return;
+        }
+
+        mensagem.textContent = "Não deu pra remover. Tente de novo.";
+        mensagem.className = "mensagem-biblioteca erro";
       });
 
       return card;
