@@ -4,7 +4,7 @@ Protótipo de uma aplicação web para recomendação de mídias — **Jogos**, 
 
 Esta é a versão em **HTML + CSS + JavaScript puro**, sem framework e sem etapa de build — é só abrir o `index.html` no navegador. Existe também uma [versão em React](https://github.com/Atlas436/CatPlay), feita antes desta.
 
-📄 [Ver artigo do projeto em PDF](assets/artigo.pdf) — também disponível como página no site, em `artigo.html`.
+📄 [Baixar o artigo do projeto em Word](artigos/CatPlay%2B%20Artigo.docx) — também disponível como página no site, em `artigo.html`.
 
 ## Login e CRUD de usuários
 
